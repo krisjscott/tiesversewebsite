@@ -1,0 +1,64 @@
+/* ============================================
+   VSCODE PREVIEW SECTION STYLES
+   Buttons are INSIDE the container at the bottom edge
+   ============================================ */
+
+.vscode-preview {
+  position: relative;
+  width: 100%;
+}
+
+.vscode-preview__container {
+  position: relative;
+  width: 100%;
+}
+
+/* Background Scenery Image - Positioned at bottom */
+.vscode-preview__background {
+  width: 100%;
+  height: auto;
+  border-radius: 4px;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  z-index: 1;
+}
+
+/* VS Code Window - Main element that determines container height */
+.vscode-preview__window {
+  position: relative;
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  box-shadow: 0 25px 80px rgba(0, 0, 0, 0.6);
+  z-index: 2;
+}
+
+/* Responsive Styles */
+@media (max-width: 1200px) {
+  .vscode-preview__window {
+    border-radius: 6px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .vscode-preview__background {
+    opacity: 0.7;
+  }
+}
+
+@media (max-width: 768px) {
+  .vscode-preview__window {
+    border-radius: 6px;
+  }
+
+  .vscode-preview__background {
+    opacity: 0.6;
+  }
+}
+
+@media (max-width: 480px) {
+  .vscode-preview__window {
+    border-radius: 4px;
+  }
+}

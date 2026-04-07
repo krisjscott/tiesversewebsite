@@ -1,0 +1,274 @@
+/* ============================================
+   EDITORIAL PUBLICATION SURFACE
+   Design: Strategic Analysis Hub
+   ============================================ */
+
+.articles-section {
+  padding: 140px 0;
+  background-color: #050505; /* Deep Black Fallback */
+  
+  /* Background Image Implementation with Strategic Scrim */
+  background-image: 
+    linear-gradient(rgba(5, 5, 5, 0.85), rgba(5, 5, 5, 0.95)), 
+    url('../assets/images/pp.jpeg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  
+  /* Optional: Enables subtle parallax depth on scroll */
+  background-attachment: fixed; 
+  
+  position: relative;
+  overflow: hidden;
+}
+
+/* Texture Layer: Breaking digital flatness with analog grain */
+.section-noise {
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity: 0.04;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.articles-container {
+  max-width: var(--container-max-width);
+  margin: 0 auto;
+  padding: 0 60px;
+  position: relative;
+  z-index: 2;
+}
+
+/* --- EDITORIAL HEADER --- */
+.editorial-header {
+  margin-bottom: 80px;
+}
+
+.header-top-bar {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 15px;
+}
+
+.issue-marker {
+  font-family: var(--font-primary);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.3em;
+  color: var(--color-primary-orange);
+}
+
+.header-divider {
+  height: 1px;
+  flex-grow: 1;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.section-title {
+  font-family: var(--font-headline);
+  font-size: 48px;
+  font-weight: 900;
+  color: #fff;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+}
+
+/* --- LAYOUT ARCHITECTURE --- */
+.articles-layout {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 60px;
+}
+
+/* --- FEATURED INSIGHT (COVER) --- */
+.featured-insight {
+  position: sticky;
+  top: 120px;
+}
+
+.structural-frame {
+  background: #0a0a0a;
+  padding: 15px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: 0 40px 100px -20px rgba(0, 0, 0, 0.8);
+}
+
+.content-canvas {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  background: #000;
+  overflow: hidden;
+  box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.5);
+}
+
+.image-layer {
+  width: 100%;
+  height: 100%;
+}
+
+.featured-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: contrast(1.1) brightness(0.7);
+  transition: transform 1.2s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.material-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, #000 0%, rgba(0,0,0,0.4) 50%, transparent 100%);
+}
+
+.typography-layer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 50px;
+  z-index: 3;
+}
+
+.editorial-signals {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 25px;
+}
+
+.discipline-badge {
+  font-size: 10px;
+  font-weight: 900;
+  color: #fff;
+  letter-spacing: 0.2em;
+  padding-left: 10px;
+  border-left: 2px solid var(--color-primary-orange);
+}
+
+.featured-label {
+  font-size: 10px;
+  font-weight: 900;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.hero-headline {
+  font-family: var(--font-primary);
+  font-size: 34px;
+  font-weight: 800;
+  line-height: 1.1;
+  color: #fff;
+  margin-bottom: 30px;
+  max-width: 90%;
+}
+
+.author-block {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.accent-rule {
+  height: 1px;
+  width: 40px;
+  background: var(--color-primary-orange);
+}
+
+.classification {
+  font-size: 11px;
+  font-weight: 700;
+  color: rgba(255,255,255,0.3);
+  letter-spacing: 0.1em;
+}
+
+/* --- SUPPORTING GRID --- */
+.articles-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+}
+
+.article-brief-card {
+  background: #0a0a0a;
+  border: 1px solid rgba(255, 255, 255, 0.03);
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.brief-image-container {
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  position: relative;
+}
+
+.brief-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.5;
+  transition: opacity 0.5s ease;
+}
+
+.brief-status-light {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.brief-meta {
+  padding: 15px;
+  background: #060606;
+}
+
+.brief-header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.brief-type {
+  font-size: 9px;
+  font-weight: 900;
+  color: rgba(255, 255, 255, 0.3);
+  letter-spacing: 0.1em;
+}
+
+.brief-id {
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.15);
+}
+
+/* Interaction: Measured & Expensive */
+.article-brief-card:hover, .article-brief-card.is-active {
+  transform: translateY(-8px);
+  border-color: rgba(232, 90, 36, 0.4);
+}
+
+.article-brief-card:hover .brief-img, .article-brief-card.is-active .brief-img {
+  opacity: 1;
+}
+
+.article-brief-card.is-active .brief-status-light {
+  background: var(--color-primary-orange);
+  box-shadow: 0 0 10px var(--color-primary-orange);
+}
+
+/* --- MOBILE: CURATED --- */
+@media (max-width: 480px) {
+  .articles-section { padding: 60px 0; }
+  .articles-container { padding: 0 20px; }
+  .section-title { font-size: 32px; text-align: center; }
+  .articles-layout { display: flex; flex-direction: column; gap: 40px; }
+  
+  .featured-insight { position: relative; top: 0; }
+  .typography-layer { padding: 25px; }
+  .hero-headline { font-size: 22px; }
+
+  .articles-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+  }
+}

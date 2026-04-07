@@ -1,0 +1,220 @@
+/* ============================================
+   CONTACT SECTION — INSTITUTIONAL EDITORIAL
+   Design: Refined, Modern, & Concise
+   ============================================ */
+
+.contact-section-surface {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  background-color: #050505;
+  color: #fff;
+  overflow: hidden;
+  padding: 120px 0;
+}
+
+/* Texture Layer */
+.contact-section-surface::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity: 0.04;
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* Background Depth */
+.contact-visual-anchor {
+  position: absolute;
+  inset: 0;
+  background-image: url('../assets/images/cc.jpg');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed; /* Parallax Depth */
+  z-index: 1;
+}
+
+.contact-tonal-overlay {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle at 30% 50%, 
+    rgba(5, 5, 5, 0.8) 0%, 
+    rgba(5, 5, 5, 0.95) 100%
+  );
+  z-index: 2;
+}
+
+.contact-main-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 60px;
+  position: relative;
+  z-index: 3;
+  width: 100%;
+}
+
+.contact-grid-system {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: center;
+}
+
+/* --- LEFT COLUMN --- */
+.institutional-marker {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.marker-line {
+  width: 30px;
+  height: 2px;
+  background: var(--color-primary-orange, #e85a24);
+}
+
+.marker-text {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.3em;
+  color: var(--color-primary-orange, #e85a24);
+  text-transform: uppercase;
+}
+
+.contact-hero-heading {
+  font-family: var(--font-headline);
+  font-size: 56px;
+  font-weight: 900;
+  line-height: 1;
+  margin-bottom: 50px;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+}
+
+.personnel-directory {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.personnel-unit {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.personnel-identity {
+  font-size: 22px;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: -0.01em;
+}
+
+/* BUTTONS */
+.premium-pill-button {
+  display: inline-block;
+  background-color: var(--color-primary-orange, #e85a24);
+  color: #fff;
+  padding: 18px 30px;
+  width: fit-content;
+  min-width: 200px;
+  text-align: center;
+  border-radius: 100px;
+  text-decoration: none;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.15em;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+}
+
+.premium-pill-button:hover {
+  transform: translateY(-3px);
+  background-color: #f06a38;
+  box-shadow: 0 15px 30px rgba(232, 90, 36, 0.3);
+}
+
+/* --- RIGHT COLUMN (CARD) --- */
+.official-intelligence-card {
+  background: rgba(20, 20, 20, 0.7);
+  backdrop-filter: blur(20px);
+  padding: 60px 50px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 6px;
+  box-shadow: 0 40px 80px rgba(0, 0, 0, 0.6);
+}
+
+.card-accent-bar {
+  width: 40px; height: 3px; background: #e85a24;
+  margin-bottom: 30px;
+}
+
+.official-card-title {
+  font-size: 28px;
+  font-weight: 800;
+  margin-bottom: 20px;
+  text-transform: uppercase;
+}
+
+.protocol-statement p {
+  font-size: 14px;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.6);
+  margin-bottom: 40px;
+}
+
+.communication-channels {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.channel-category {
+  display: block;
+  font-size: 9px;
+  font-weight: 900;
+  color: #e85a24;
+  letter-spacing: 0.2em;
+  margin-bottom: 8px;
+}
+
+.verified-email {
+  font-size: 20px;
+  font-weight: 600;
+  color: #fff;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.verified-email:hover {
+  color: #e85a24;
+}
+
+.card-footer-meta {
+  margin-top: 50px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.protocol-tag {
+  font-size: 9px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.3);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+/* --- MOBILE --- */
+@media (max-width: 900px) {
+  .contact-section-surface { padding: 80px 0; }
+  .contact-main-container { padding: 0 24px; }
+  .contact-grid-system { grid-template-columns: 1fr; gap: 60px; }
+  .contact-hero-heading { font-size: 42px; margin-bottom: 40px; }
+  .premium-pill-button { width: 100%; }
+  .official-intelligence-card { padding: 40px 30px; }
+}
