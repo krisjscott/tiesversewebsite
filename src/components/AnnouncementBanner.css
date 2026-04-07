@@ -1,0 +1,139 @@
+.announcement-banner-wrapper {
+    position: relative;
+    width: 100%;
+    height: 45px;
+    background: #000;
+    border-bottom: 1px solid rgba(232, 90, 36, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.banner-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 95%;
+    max-width: 1400px;
+    gap: 30px;
+}
+
+.banner-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex: 1;
+    overflow: hidden;
+}
+
+.banner-tag {
+    background: var(--accent-orange, #E85A24);
+    color: #fff;
+    font-size: 8px;
+    font-weight: 900;
+    padding: 3px 10px;
+    border-radius: 4px;
+    letter-spacing: 1px;
+    white-space: nowrap;
+}
+
+.banner-text {
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.8);
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.banner-text strong {
+    color: #fff;
+}
+
+.banner-right {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.banner-cta {
+    background: #fff;
+    color: #000;
+    text-decoration: none;
+    font-size: 9px;
+    font-weight: 900;
+    padding: 6px 16px;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+    letter-spacing: 0.5px;
+    display: inline-flex;
+    align-items: center;
+}
+
+.banner-cta:hover {
+    background: var(--accent-orange, #E85A24);
+    color: #fff;
+}
+
+.banner-close {
+    background: transparent;
+    border: none;
+    color: rgba(255, 255, 255, 0.4);
+    cursor: pointer;
+    font-size: 14px;
+    transition: color 0.3s ease;
+    padding: 5px;
+}
+
+.banner-close:hover {
+    color: #fff;
+}
+
+.banner-progress {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 1px;
+    background: var(--accent-orange, #E85A24);
+    width: 100%;
+    animation: bannerProgressPulse 3s ease-in-out infinite;
+    opacity: 0.3;
+}
+
+@keyframes bannerProgressPulse {
+
+    0%,
+    100% {
+        opacity: 0.1;
+        transform: scaleX(0.8);
+    }
+
+    50% {
+        opacity: 0.6;
+        transform: scaleX(1);
+    }
+}
+
+/* Ensure Home/Navbar shift down when banner is present */
+@media (min-width: 1025px) {
+    /* Navbar shift is handled by Navbar.jsx using .global-notice-bar class */
+}
+
+@media (max-width: 768px) {
+    .announcement-banner-wrapper {
+        height: 55px;
+    }
+
+    .banner-content {
+        gap: 10px;
+    }
+
+    .banner-tag {
+        display: none;
+    }
+
+    .banner-text {
+        font-size: 10px;
+    }
+}

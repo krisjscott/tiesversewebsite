@@ -1,0 +1,74 @@
+/* ============================================
+   PLACEHOLDER PAGE STYLES
+   ============================================ */
+
+.placeholder-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--color-background);
+  color: var(--color-text-white);
+  padding: 120px 24px 60px;
+  text-align: center;
+}
+
+.placeholder-page__title {
+  font-family: var(--font-headline);
+  font-size: clamp(32px, 5vw, 56px);
+  font-weight: 700;
+  margin-bottom: 16px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.placeholder-page__divider {
+  width: 60px;
+  height: 3px;
+  background-color: var(--color-primary-orange);
+  margin-bottom: 24px;
+}
+
+.placeholder-page__subtitle {
+  font-size: 18px;
+  color: var(--color-text-gray);
+  margin-bottom: 40px;
+}
+
+.placeholder-page__back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 28px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-text-white);
+  background-color: transparent;
+  border: 2px solid var(--color-primary-orange);
+  border-radius: 4px;
+  text-decoration: none;
+  transition: all var(--transition-fast);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.placeholder-page__back-link:hover {
+  background-color: var(--color-primary-orange);
+  color: var(--color-text-white);
+}
+
+@media (max-width: 480px) {
+  .placeholder-page {
+    padding: 100px 16px 40px;
+  }
+
+  .placeholder-page__subtitle {
+    font-size: 16px;
+  }
+
+  .placeholder-page__back-link {
+    padding: 10px 20px;
+    font-size: 12px;
+  }
+}

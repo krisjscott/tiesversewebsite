@@ -1,0 +1,349 @@
+/* ============================================
+   SOLAR SYSTEM SECTION
+   ============================================ */
+
+.solar-system {
+  position: relative;
+  min-height: 100vh;
+  padding: 80px var(--container-padding) 100px;
+  background-color: var(--color-background);
+  /* overflow: hidden is critical to contain the absolute video and orbits */
+  overflow: hidden; 
+}
+
+.solar-system__container {
+  max-width: var(--container-max-width);
+  margin: 0 auto;
+  position: relative;
+  z-index: 2; /* Content sits above the video and overlay */
+  min-height: inherit;
+}
+
+/* --- HIGH-IMPACT TYPOGRAPHY --- */
+.solar-system__title {
+  font-family: var(--font-headline);
+  /* Aggressive focal scale using clamp for responsiveness */
+  font-size: clamp(48px, 10vw, 110px); 
+  font-weight: 900;
+  line-height: 0.85;
+  text-transform: uppercase;
+  /* Tight letter-spacing for a modern, high-impact product feel */
+  letter-spacing: -0.05em; 
+  color: #ffffff;
+  margin-bottom: 80px;
+  text-align: center;
+  position: relative;
+  
+  /* Premium Depth: Subtle vertical gradient to mimic high-end editorial print */
+  background: linear-gradient(to bottom, #ffffff 40%, rgba(255, 255, 255, 0.6) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  
+  /* Ensures legibility against the Aadi.mp4 motion */
+  text-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  opacity: 0.95;
+}
+
+/* --- VIDEO BACKGROUND LAYER --- */
+.solar-system__video-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+  background-color: #000; /* Fallback for slow loads */
+}
+
+.solar-system__bg-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.35; /* Subtle enough to let orbits be the hero */
+}
+
+.solar-system__video-overlay {
+  position: absolute;
+  inset: 0;
+  /* Radial gradient focuses light on the central Tiesverse Sun */
+  background: radial-gradient(
+    circle at center,
+    transparent 0%,
+    rgba(10, 10, 10, 0.4) 60%,
+    var(--color-background) 100%
+  );
+}
+
+/* ============================================
+   ORBITAL MECHANICS
+   ============================================ */
+
+.solar-system__visual {
+  position: relative;
+  width: 100%;
+  height: 700px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  perspective: 1500px;
+  /* Ensure visual doesn't intercept scrolls outside planet clicks */
+  pointer-events: none; 
+}
+
+.orbital-rings {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  transform-style: preserve-3d;
+}
+
+.orbital-ring {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.12); /* Increased contrast slightly */
+  border-radius: 50%;
+  transform: translate(-50%, -50%) rotateX(75deg);
+  transition: border-color 0.3s ease;
+}
+
+.orbital-ring--1 { width: 220px; height: 220px; }
+.orbital-ring--2 { width: 320px; height: 320px; }
+.orbital-ring--3 { width: 420px; height: 420px; }
+.orbital-ring--4 { width: 520px; height: 520px; }
+.orbital-ring--5 { width: 620px; height: 620px; }
+.orbital-ring--6 { width: 720px; height: 720px; }
+.orbital-ring--7 { width: 820px; height: 820px; }
+
+/* ============================================
+   THE SUN (CENTER)
+   ============================================ */
+
+.solar-system__sun {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+  width: 160px;
+  height: 160px;
+  filter: drop-shadow(0 0 40px rgba(232, 90, 36, 0.3));
+  pointer-events: auto; /* Allow interaction if needed */
+}
+
+.solar-system__sun-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* ============================================
+   PLANET ANIMATION & ORBITS
+   ============================================ */
+
+.planet-orbit {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform-style: preserve-3d;
+  animation: orbit linear infinite;
+  pointer-events: none;
+}
+
+.planet {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  cursor: pointer;
+  pointer-events: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform-style: preserve-3d;
+  animation: planet-upright linear infinite;
+  transition: filter 0.3s ease, transform 0.3s ease;
+}
+
+.planet:hover {
+  filter: drop-shadow(0 0 25px rgba(255, 255, 255, 0.4)) brightness(1.2);
+  transform: scale(1.1) rotateZ(0deg) rotateX(-75deg); /* Maintain perspective while scaling */
+}
+
+.planet__image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+@keyframes orbit {
+  from { transform: rotateX(75deg) rotateZ(0deg); }
+  to { transform: rotateX(75deg) rotateZ(360deg); }
+}
+
+@keyframes planet-upright {
+  from { transform: rotateZ(0deg) rotateX(-75deg); }
+  to { transform: rotateZ(-360deg) rotateX(-75deg); }
+}
+
+/* --- ORBIT SPEEDS & SIZES --- */
+.orbit-1 { width: 220px; height: 220px; margin-left: -110px; margin-top: -110px; animation-duration: 40s; }
+.orbit-1 .planet { width: 70px; height: 70px; margin-left: -35px; margin-top: -35px; animation-duration: 40s; }
+
+.orbit-2 { width: 320px; height: 320px; margin-left: -160px; margin-top: -160px; animation-duration: 35s; }
+.orbit-2 .planet { width: 80px; height: 80px; margin-left: -40px; margin-top: -40px; animation-duration: 35s; }
+
+.orbit-3 { width: 420px; height: 420px; margin-left: -210px; margin-top: -210px; animation-duration: 30s; }
+.orbit-3 .planet { width: 75px; height: 75px; margin-left: -37.5px; margin-top: -37.5px; animation-duration: 30s; }
+
+.orbit-4 { width: 520px; height: 520px; margin-left: -260px; margin-top: -260px; animation-duration: 25s; }
+.orbit-4 .planet { width: 90px; height: 90px; margin-left: -45px; margin-top: -45px; animation-duration: 25s; }
+
+.orbit-5 { width: 620px; height: 620px; margin-left: -310px; margin-top: -310px; animation-duration: 20s; }
+.orbit-5 .planet { width: 85px; height: 85px; margin-left: -42.5px; margin-top: -42.5px; animation-duration: 20s; }
+
+.orbit-6 { width: 720px; height: 720px; margin-left: -360px; margin-top: -360px; animation-duration: 15s; }
+.orbit-6 .planet { width: 88px; height: 88px; margin-left: -44px; margin-top: -44px; animation-duration: 15s; }
+
+.orbit-7 { width: 820px; height: 820px; margin-left: -410px; margin-top: -410px; animation-duration: 10s; }
+.orbit-7 .planet { width: 95px; height: 95px; margin-left: -47.5px; margin-top: -47.5px; animation-duration: 10s; }
+
+/* ============================================
+   INITIATIVE CARD (DETAIL OVERLAY)
+   ============================================ */
+
+.initiative-card {
+  position: absolute;
+  bottom: 40px;
+  left: 40px;
+  width: 320px;
+  /* Glassmorphism Refinement */
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-radius: 24px;
+  z-index: 200;
+  overflow: hidden;
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  animation: cardFadeIn 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+@keyframes cardFadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.initiative-card__close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.05);
+  border: none;
+  border-radius: 50%;
+  color: #333;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  z-index: 10;
+}
+
+.initiative-card__close:hover {
+  background: #000;
+  color: #fff;
+}
+
+.initiative-card__logo-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 50px 30px 30px;
+  background: linear-gradient(180deg, #f0f0f0 0%, #ffffff 100%);
+}
+
+.initiative-card__logo {
+  height: 90px;
+  width: auto;
+  max-width: 200px;
+  object-fit: contain;
+}
+
+.initiative-card__content {
+  padding: 0 30px 30px;
+  text-align: left; /* Editorial alignment */
+}
+
+.initiative-card__name {
+  font-family: var(--font-primary);
+  font-size: 20px;
+  font-weight: 700;
+  color: #111;
+  margin-bottom: 8px;
+  letter-spacing: -0.01em;
+}
+
+.initiative-card__description {
+  font-family: var(--font-primary);
+  font-size: 14px;
+  line-height: 1.6;
+  color: #555;
+  margin: 0;
+}
+
+.initiative-card__actions {
+  display: flex;
+  gap: 12px;
+  padding: 20px 30px 30px;
+  border-top: 1px solid #eee;
+}
+
+.initiative-card__action {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  background: #f5f5f5;
+  border-radius: 12px;
+  color: #111;
+  transition: all 0.2s ease;
+}
+
+.initiative-card__action:hover {
+  background: #000;
+  color: #fff;
+  transform: translateY(-3px);
+}
+
+/* ============================================
+   RESPONSIVE OVERRIDES
+   ============================================ */
+
+@media (max-width: 768px) {
+  .solar-system { padding-top: 60px; }
+  
+  .solar-system__title {
+    font-size: clamp(36px, 12vw, 48px);
+    letter-spacing: -0.03em;
+    margin-bottom: 40px;
+  }
+
+  .solar-system__visual { height: 500px; }
+  .solar-system__sun { width: 100px; height: 100px; }
+
+  .initiative-card {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    right: 20px;
+    width: auto;
+    max-width: 100%;
+  }
+}
