@@ -220,7 +220,7 @@ const About = () => {
 
         /* --- STATS CARDS --- */
         .stats-section {
-          margin: 130px 0 90px;
+          margin: 35px 0 30px;
         }
 
         .stats-grid {
@@ -237,6 +237,9 @@ const About = () => {
           height: auto;
           position: relative;
           perspective: 1200px;
+          --card-scale: 1;
+          transform: scale(var(--card-scale));
+          transform-origin: center top;
         }
 
         .stats-section .stats-card-wrap {
@@ -441,10 +444,13 @@ const About = () => {
         }
 
         @media (max-width: 600px) {
-          .stats-grid { grid-template-columns: 1fr; }
-          .stats-section .stats-card { max-width: 260px; }
-          .stats-section .stat-value { font-size: 50px; }
-          .stats-section .stats-card-content { padding: 14px 36px; }
+          .stats-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+          .stats-section .stats-card { max-width: 200px; --card-scale: 0.82; }
+          .stats-section .stat-value { font-size: 34px; }
+          .stats-section .stat-label { font-size: 10px; letter-spacing: 0.2em; }
+          .stats-section .stats-card-content { padding: 8px 10px; gap: 8px; }
+          .stats-section .stats-card-surface { min-height: 108px; }
+          .stats-section .stats-pop { display: none; }
         }
 
         /* --- VISION & AIM SECTION (DESKTOP) --- */

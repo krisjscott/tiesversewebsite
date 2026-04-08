@@ -93,8 +93,8 @@ const Planet = React.memo(({ item, isActive, progress, index, total, viewport, g
     opacity = Math.max(0, Math.min(1, 1 - Math.abs(localProgress) * 0.7));
 
     // SCALE: HERO FOCUS (Smoothly blend between idle and focus to avoid abrupt pop)
-    const inactiveScale = isMobile ? 0.68 : (isTablet ? 0.78 : 0.82);
-    const activeScale = isMobile ? 1.65 : 1.6;
+    const inactiveScale = isMobile ? 0.62 : (isTablet ? 0.78 : 0.82);
+    const activeScale = isMobile ? 1.45 : 1.6;
     const focus = Math.pow(Math.max(0, 1 - Math.abs(localProgress) * 0.95), 1.7);
     const baseScale = inactiveScale + (activeScale - inactiveScale) * focus;
     // Fluidly scale planets with their container
@@ -111,7 +111,7 @@ const Planet = React.memo(({ item, isActive, progress, index, total, viewport, g
     glowIntensity = Math.pow(Math.max(0, 1 - Math.abs(localProgress)), 1.8);
 
     // ORBIT: Tightened on mobile to ensure planets stay within viewport
-    const orbitRadius = globeContainerSize * (isMobile ? 0.41 : (isTablet ? 0.48 : 0.58));
+    const orbitRadius = globeContainerSize * (isMobile ? 0.42 : (isTablet ? 0.48 : 0.58));
     const angleDeg = 180 + (localProgress * 55);
     const angleRad = (angleDeg * Math.PI) / 180;
 
@@ -123,7 +123,7 @@ const Planet = React.memo(({ item, isActive, progress, index, total, viewport, g
   if (opacity < 0.01) return null;
 
   // Fluid planet base size (Scaled for visibility and viewport safety)
-  const planetSize = `${globeContainerSize * (isMobile ? 0.32 : (isTablet ? 0.33 : 0.35))}px`;
+  const planetSize = `${globeContainerSize * (isMobile ? 0.31 : (isTablet ? 0.33 : 0.35))}px`;
 
   const isUpties = item.id === 'upties';
 
@@ -298,7 +298,7 @@ const InitiativesSection = () => {
 
   // HERO GLOBE SIZING: Significantly larger to make them highly visible
   const globeContainerSize = isMobile
-    ? Math.min(viewport.width * 0.78, viewport.height * 0.6, 420)
+    ? Math.min(viewport.width * 0.68, viewport.height * 0.54, 380)
     : (isTablet ? Math.min(viewport.width * 0.52, viewport.height * 0.82, 640) : Math.min(viewport.width * 0.5, viewport.height * 0.85, 750));
 
   const activeIndex = Math.min(Math.round(progress * (initiatives.length - 1)), initiatives.length - 1);
@@ -327,13 +327,13 @@ const InitiativesSection = () => {
 
         <div style={{
           position: 'absolute',
-          top: isMobile ? '12vh' : '7.5vh',
+          top: isMobile ? '0.5vh' : '7.5vh',
           left: '0', width: '100%',
           textAlign: 'center',
-          zIndex: isMobile ? 1 : 12,
+          zIndex: 12,
           pointerEvents: 'none',
           display: 'flex', flexDirection: 'column', alignItems: 'center',
-          opacity: isMobile ? Math.max(0, 0.6 - progress * 3) : 1,
+          opacity: isMobile ? 1 : 1,
           transform: isMobile ? `scale(${1 + progress * 0.5}) translateY(${progress * -40}px)` : 'none',
           transition: isMobile ? 'none' : 'opacity 0.8s ease'
         }}>
@@ -357,9 +357,10 @@ const InitiativesSection = () => {
                 margin: 0,
                 position: 'absolute',
                 top: '50%', left: '50%', transform: 'translate(-50%, -50%)',
-                opacity: 0.06,
+                opacity: isMobile ? 0 : 0.38,
                 WebkitTextStroke: '1px white',
                 color: 'transparent',
+                textShadow: '0 0 18px rgba(255,255,255,0.25)',
                 whiteSpace: 'nowrap',
                 pointerEvents: 'none'
               }}>
@@ -369,20 +370,20 @@ const InitiativesSection = () => {
 
               <h1 style={{
                 fontFamily: "'Space Grotesk', sans-serif",
-                fontSize: 'clamp(1.4rem, 4.2vw, 3.6rem)',
+                fontSize: isMobile ? 'clamp(1.9rem, 6.2vw, 2.6rem)' : 'clamp(1.4rem, 4.2vw, 3.6rem)',
                 fontWeight: 900,
                 textTransform: 'uppercase',
-                letterSpacing: 'clamp(6px, 1.2vw, 20px)',
+                letterSpacing: isMobile ? '0.06em' : 'clamp(6px, 1.2vw, 20px)',
                 margin: 0,
                 position: 'relative',
                 color: 'white',
-                textShadow: '0 0 30px rgba(255,255,255,0.4)',
-                opacity: 0.9,
+                textShadow: isMobile ? '0 2px 12px rgba(0,0,0,0.6)' : '0 0 30px rgba(255,255,255,0.4)',
+                opacity: isMobile ? 1 : 0.9,
                 display: 'flex',
                 alignItems: 'center',
                 gap: '1vw'
               }}>
-                OUR <span style={{ color: activeItem.color, transition: 'color 0.8s ease', opacity: 0.8 }}>INITIATIVES</span>
+                OUR <span style={{ color: isMobile ? '#e85a24' : activeItem.color, transition: 'color 0.8s ease', opacity: isMobile ? 1 : 0.8 }}>INITIATIVES</span>
               </h1>
             </div>
 
@@ -423,21 +424,21 @@ const InitiativesSection = () => {
             display: isMobile ? 'flex' : 'grid',
             flexDirection: isMobile ? 'column' : undefined,
             gridTemplateColumns: isMobile ? undefined : '1.05fr 1fr',
-            alignItems: isMobile ? 'flex-start' : 'center',
+            alignItems: isMobile ? 'stretch' : 'center',
             justifyContent: isMobile ? 'flex-start' : 'space-between',
             gap: isMobile ? '2vh' : '2vw',
             flex: 1
           }}>
             {/* GLOBE CONTAINER */}
             <div style={{
-              order: isMobile ? 1 : 2,
+              order: isMobile ? 2 : 2,
               position: 'relative',
               display: 'flex',
               alignItems: 'center',
-              justifyContent: isMobile ? 'center' : 'flex-end',
-              minHeight: isMobile ? '40vh' : (isTablet ? '60vh' : 'auto'),
-              maxHeight: isMobile ? '48vh' : 'none',
-              width: '100%',
+              justifyContent: isMobile ? 'flex-end' : 'flex-end',
+              minHeight: isMobile ? '42vh' : (isTablet ? '60vh' : 'auto'),
+              maxHeight: isMobile ? '52vh' : 'none',
+              width: isMobile ? '100%' : '100%',
               overflow: 'visible',
               paddingLeft: '0',
               zIndex: 5
@@ -447,6 +448,8 @@ const InitiativesSection = () => {
                 right: isMobile ? 'auto' : (isTablet ? '-45%' : '-26%'),
                 width: `${globeContainerSize}px`,
                 height: `${globeContainerSize}px`,
+                marginLeft: isMobile ? 'auto' : undefined,
+                transform: isMobile ? 'translateX(14%)' : undefined,
                 pointerEvents: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center'
               }}>
                 <img src={tiesverseLogo} alt="Hub" style={{ width: '55%', height: 'auto', filter: 'drop-shadow(0 0 50px rgba(255,255,255,0.1))', zIndex: 10, userSelect: 'none', transform: 'translateZ(0)' }} />
@@ -458,37 +461,38 @@ const InitiativesSection = () => {
 
             {/* TEXT CONTAINER */}
             <div style={{
-              order: isMobile ? 2 : 1,
+              order: isMobile ? 1 : 1,
               display: 'flex',
-              justifyContent: isMobile ? 'center' : 'flex-start',
-              width: '100%',
+              justifyContent: isMobile ? 'flex-start' : 'flex-start',
+              width: isMobile ? '100%' : '100%',
               zIndex: 10
             }}>
               <div key={activeItem.id} style={{
                 maxWidth: isMobile ? '520px' : (isTablet ? '620px' : '560px'),
                 width: '100%',
-                padding: isMobile ? '14px 16px 18px' : '24px 26px',
-                background: 'linear-gradient(140deg, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0.35) 100%)',
-                border: '1px solid rgba(255,255,255,0.08)',
-                boxShadow: '0 20px 50px rgba(0,0,0,0.45)',
-                backdropFilter: 'blur(8px)'
+                padding: isMobile ? '12px 12px 14px' : '24px 26px',
+                background: 'linear-gradient(140deg, rgba(0,0,0,0.26) 0%, rgba(0,0,0,0.12) 100%)',
+                border: '1px solid rgba(255,255,255,0.035)',
+                boxShadow: '0 12px 30px rgba(0,0,0,0.28)',
+                backdropFilter: 'blur(6px)',
+                borderRadius: '16px'
               }}>
-                <div className="fade-in-up stagger-1" style={{ display: 'flex', alignItems: 'center', justifyContent: isMobile ? 'center' : 'flex-start', gap: '12px', marginBottom: 'clamp(8px, 1.6vh, 16px)' }}>
+                <div className="fade-in-up stagger-1" style={{ display: 'flex', alignItems: 'center', justifyContent: isMobile ? 'flex-start' : 'flex-start', gap: '12px', marginBottom: 'clamp(8px, 1.6vh, 16px)' }}>
                   <div style={{ height: '2px', width: '35px', background: activeItem.color, transition: 'background 0.5s' }} />
                   <span style={{ color: activeItem.color, fontWeight: '900', letterSpacing: 'clamp(2px, 0.4vw, 5px)', fontSize: 'clamp(0.6rem, 0.8vw, 0.75rem)', transition: 'color 0.5s', fontFamily: "'Space Mono', monospace" }}>
                     PROJECT 0{activeIndex + 1}
                   </span>
                 </div>
 
-                <h2 className="fade-in-up stagger-2" style={{ color: 'white', fontSize: isMobile ? 'clamp(1.5rem, 5.8vw + 1vh, 2.2rem)' : (isTablet ? 'clamp(3.1rem, 6.2vw, 4.8rem)' : 'clamp(3.1rem, 4.6vw + 2vh, 5rem)'), fontFamily: "'Space Grotesk', sans-serif", margin: '0 0 6px 0', lineHeight: 0.92, textTransform: 'uppercase', fontWeight: 900, textShadow: '0 10px 30px rgba(0,0,0,0.5)', transition: 'color 0.4s ease', textAlign: isMobile ? 'center' : 'left' }}>
+                <h2 className="fade-in-up stagger-2" style={{ color: 'white', fontSize: isMobile ? 'clamp(1.15rem, 4.4vw + 0.9vh, 1.75rem)' : (isTablet ? 'clamp(3.1rem, 6.2vw, 4.8rem)' : 'clamp(3.1rem, 4.6vw + 2vh, 5rem)'), fontFamily: "'Space Grotesk', sans-serif", margin: '0 0 6px 0', lineHeight: 0.92, textTransform: 'uppercase', fontWeight: 900, textShadow: '0 10px 30px rgba(0,0,0,0.5)', transition: 'color 0.4s ease', textAlign: isMobile ? 'left' : 'left' }}>
                   {activeItem.name}
                 </h2>
 
-                <p className="fade-in-up stagger-3" style={{ color: '#b9b9b9', fontSize: isMobile ? 'clamp(0.82rem, 2.3vw, 1rem)' : (isTablet ? 'clamp(1.1rem, 1.8vw, 1.35rem)' : 'clamp(0.95rem, 0.6vw + 0.6vh, 1.2rem)'), lineHeight: 1.5, marginBottom: isMobile ? '14px' : '36px', fontFamily: "'Inter', sans-serif", fontWeight: 300, maxWidth: isMobile ? '420px' : 'none', margin: isMobile ? '0 auto 14px' : '0 0 36px', textAlign: isMobile ? 'center' : 'left' }}>
+                <p className="fade-in-up stagger-3" style={{ color: '#b9b9b9', fontSize: isMobile ? 'clamp(0.7rem, 2.1vw, 0.92rem)' : (isTablet ? 'clamp(1.1rem, 1.8vw, 1.35rem)' : 'clamp(0.95rem, 0.6vw + 0.6vh, 1.2rem)'), lineHeight: 1.5, marginBottom: isMobile ? '12px' : '36px', fontFamily: "'Inter', sans-serif", fontWeight: 300, maxWidth: isMobile ? '100%' : 'none', margin: isMobile ? '0 0 12px' : '0 0 36px', textAlign: isMobile ? 'left' : 'left' }}>
                   {activeItem.desc}
                 </p>
 
-                <div className="fade-in-up stagger-4" style={{ textAlign: isMobile ? 'center' : 'left' }}>
+                <div className="fade-in-up stagger-4" style={{ textAlign: isMobile ? 'left' : 'left' }}>
                   <a
                     href={activeItem.web}
                     target="_blank"
