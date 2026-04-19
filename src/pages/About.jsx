@@ -1,8 +1,3 @@
-<<<<<<< HEAD
-import React from 'react';
-
-const About = () => {
-=======
 import React, { useMemo } from 'react';
 import ytIcon from '../assets/youtube.svg';
 import igIcon from '../assets/instagram.svg';
@@ -36,7 +31,6 @@ const About = () => {
     return pick;
   }, []);
 
->>>>>>> node-krisjscott
   // Extracting pillar data to duplicate it easily for the mobile marquee effect
   const pillarsData = [
     {
@@ -55,8 +49,6 @@ const About = () => {
       desc: "Developing proprietary tools to democratize information access and enhance community participation."
     }
   ];
-<<<<<<< HEAD
-=======
   const statsCards = [
     {
       value: "100M+",
@@ -94,7 +86,6 @@ const About = () => {
       ]
     }
   ];
->>>>>>> node-krisjscott
 
   return (
     <section className="about-v4-mobile-optimized" id="about-section">
@@ -227,8 +218,6 @@ const About = () => {
         .p-title { font-size: 1rem; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 10px; }
         .p-desc { font-size: 0.85rem; color: var(--text-gray); line-height: 1.5; }
 
-<<<<<<< HEAD
-=======
         /* --- STATS CARDS --- */
         .stats-section {
           margin: 35px 0 30px;
@@ -464,7 +453,6 @@ const About = () => {
           .stats-section .stats-pop { display: none; }
         }
 
->>>>>>> node-krisjscott
         /* --- VISION & AIM SECTION (DESKTOP) --- */
         .vision-aim-grid {
           display: grid;
@@ -584,11 +572,7 @@ const About = () => {
         .b7 { width: 140px; height: 140px; background: #aa461e; font-size: 0.75rem; z-index: 1; }
         .b8 { width: 160px; height: 160px; background: #781e0a; font-size: 0.85rem; z-index: 2; }
 
-<<<<<<< HEAD
-        /* --- REDESIGNED IMPACT METRICS (SOLID + POP-OUT TABS) --- */
-=======
         /* --- REDESIGNED IMPACT METRICS (SOLID + FOLD-OUT CARDS) --- */
->>>>>>> node-krisjscott
         .impact-section {
           background: transparent; 
           padding: 60px 0 20px;
@@ -606,38 +590,6 @@ const About = () => {
           text-align: center;
           cursor: default;
           margin-top: 20px; /* Space for the pop-out elements */
-<<<<<<< HEAD
-        }
-
-        /* The Hidden Elements that pop out */
-        .pop-out-track {
-          position: absolute;
-          top: 0;
-          left: 0;
-          width: 100%;
-          height: 100%;
-          z-index: 1;
-          display: flex;
-          justify-content: center;
-          align-items: flex-start;
-          gap: 8px;
-          padding-top: 5px;
-          transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-
-        /* Mini solid shapes mimicking extra cards/tags */
-        .pop-item {
-          width: 32px;
-          height: 40px;
-          border-radius: 4px;
-          background: #333;
-          box-shadow: 0 4px 10px rgba(0,0,0,0.5);
-        }
-        
-        .pop-item.c1 { background: var(--brand-orange); transform: rotate(-8deg); }
-        .pop-item.c2 { background: #ffffff; width: 45px; height: 48px; z-index: 2; display: flex; align-items: center; justify-content: center; color: #000; font-weight: 900; font-size: 14px;}
-        .pop-item.c3 { background: #555555; transform: rotate(8deg); }
-=======
           overflow: visible;
           perspective: 900px;
           --fan-rise-3: 34px;
@@ -703,7 +655,6 @@ const About = () => {
         .pop-out-track.four .pop-card:nth-child(2) { transform: translate(-50%, 0) rotate(-3deg); }
         .pop-out-track.four .pop-card:nth-child(3) { transform: translate(-50%, 0) rotate(3deg); }
         .pop-out-track.four .pop-card:nth-child(4) { transform: translate(-50%, 0) rotate(8deg); }
->>>>>>> node-krisjscott
 
         /* The Main Solid Card Body */
         .metric-inner {
@@ -713,12 +664,8 @@ const About = () => {
           border: 2px solid #222222; /* Solid Border */
           padding: 40px 20px;
           border-radius: 6px;
-<<<<<<< HEAD
-          transition: transform 0.3s ease, border-color 0.3s ease;
-=======
           transform-style: preserve-3d;
           transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
->>>>>>> node-krisjscott
         }
 
         .metric-card h4 { 
@@ -743,13 +690,6 @@ const About = () => {
         /* THE HOVER TRIGGER */
         .metric-card:hover .metric-inner {
           border-color: var(--brand-orange);
-<<<<<<< HEAD
-          transform: translateY(-2px);
-        }
-
-        .metric-card:hover .pop-out-track {
-          transform: translateY(-38px); /* Elements aggressively pop up from behind */
-=======
           transform: translateY(-4px) rotateX(-35deg);
           box-shadow: 0 16px 28px rgba(0,0,0,0.45);
         }
@@ -783,7 +723,6 @@ const About = () => {
 
         .metric-card:hover .pop-card {
           box-shadow: 0 16px 24px rgba(0,0,0,0.55);
->>>>>>> node-krisjscott
         }
 
         /* =========================================
@@ -898,11 +837,6 @@ const About = () => {
             margin-top: 10px; /* Kept tight */
           }
           
-<<<<<<< HEAD
-          /* Allow pop out on touch devices when tapped */
-          .metric-card:active .metric-inner { border-color: var(--brand-orange); }
-          .metric-card:active .pop-out-track { transform: translateY(-38px); }
-=======
           .metric-card {
             --fan-rise-3: 26px;
             --fan-spread-3: 70px;
@@ -911,7 +845,7 @@ const About = () => {
             --fan-spread-4-outer: 100px;
           }
 
-          /* Allow pop out on touch devices when tapped */
+          // POP OUT CARD WHEN SELECTED/TOUCHED
           .metric-card:active .metric-inner { border-color: var(--brand-orange); }
           .metric-card:active .metric-inner { transform: translateY(-3px) rotateX(-6deg); box-shadow: 0 14px 24px rgba(0,0,0,0.45); }
           .metric-card:active .pop-card { opacity: 1; }
@@ -922,7 +856,6 @@ const About = () => {
           .metric-card:active .pop-out-track.four .pop-card:nth-child(2) { transform: translate(calc(-50% - var(--fan-spread-4-inner)), calc(-1 * var(--fan-rise-4) - 6px)) rotate(-8deg); }
           .metric-card:active .pop-out-track.four .pop-card:nth-child(3) { transform: translate(calc(-50% + var(--fan-spread-4-inner)), calc(-1 * var(--fan-rise-4) - 6px)) rotate(8deg); }
           .metric-card:active .pop-out-track.four .pop-card:nth-child(4) { transform: translate(calc(-50% + var(--fan-spread-4-outer)), calc(-1 * var(--fan-rise-4))) rotate(16deg); }
->>>>>>> node-krisjscott
           
           .metric-inner {
             padding: 30px 15px;
@@ -990,11 +923,7 @@ const About = () => {
           </div>
         </div>
 
-<<<<<<< HEAD
-        {/* 3. VISION & AIM */}
-=======
         {/* 4. VISION & AIM */}
->>>>>>> node-krisjscott
         <div className="vision-aim-grid">
           <div className="va-card">
             <div className="quote-icon">“</div>
@@ -1023,11 +952,7 @@ const About = () => {
           </div>
         </div>
 
-<<<<<<< HEAD
-        {/* 4. CREATIVE WORK AREAS (Solid Desktop Bubbles, Vibrant Mobile Pills) */}
-=======
         {/* 5. CREATIVE WORK AREAS (Solid Desktop Bubbles, Vibrant Mobile Pills) */}
->>>>>>> node-krisjscott
         <div className="work-areas-section">
           <h2 className="va-title" style={{ textAlign: 'center', marginBottom: '10px' }}>OUR <span>WORK AREAS</span></h2>
           <div className="bubble-cluster">
@@ -1042,60 +967,6 @@ const About = () => {
           </div>
         </div>
 
-<<<<<<< HEAD
-        {/* 5. IMPACT METRICS (Solid Colors + Pop-out Tabs on Hover) */}
-        <div className="impact-section">
-          <div className="impact-grid">
-            
-            <div className="metric-card">
-              <div className="pop-out-track">
-                <div className="pop-item c1"></div>
-                <div className="pop-item c2">▶</div>
-                <div className="pop-item c3"></div>
-              </div>
-              <div className="metric-inner">
-                <h4>100M+</h4>
-                <span>Total Reach</span>
-              </div>
-            </div>
-
-            <div className="metric-card">
-              <div className="pop-out-track">
-                <div className="pop-item c1"></div>
-                <div className="pop-item c2">✓</div>
-                <div className="pop-item c3"></div>
-              </div>
-              <div className="metric-inner">
-                <h4>85+</h4>
-                <span>Specialists</span>
-              </div>
-            </div>
-
-            <div className="metric-card">
-              <div className="pop-out-track">
-                <div className="pop-item c1"></div>
-                <div className="pop-item c2">★</div>
-                <div className="pop-item c3"></div>
-              </div>
-              <div className="metric-inner">
-                <h4>21</h4>
-                <span>Avg Age</span>
-              </div>
-            </div>
-
-            <div className="metric-card">
-              <div className="pop-out-track">
-                <div className="pop-item c1"></div>
-                <div className="pop-item c2">❤</div>
-                <div className="pop-item c3"></div>
-              </div>
-              <div className="metric-inner">
-                <h4>7M+</h4>
-                <span>Engagements</span>
-              </div>
-            </div>
-
-=======
         {/* 6. STATS CARDS */}
         <div className="stats-section">
           <div className="stats-grid">
@@ -1120,7 +991,6 @@ const About = () => {
                 </div>
               </div>
             ))}
->>>>>>> node-krisjscott
           </div>
         </div>
 
@@ -1129,8 +999,4 @@ const About = () => {
   );
 };
 
-<<<<<<< HEAD
 export default About;
-=======
-export default About;
->>>>>>> node-krisjscott

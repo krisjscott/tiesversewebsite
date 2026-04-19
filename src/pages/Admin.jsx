@@ -1,7 +1,4 @@
 import React, { useState, useEffect } from 'react';
-<<<<<<< HEAD
-import { supabase } from '../supabaseClient';
-=======
 import {
     login, logout, getSession,
     getEvents, createEvent, updateEvent, deleteEvent,
@@ -11,7 +8,7 @@ import {
     getTeam, createMember, updateMember, deleteMember,
     getSettings, updateSetting
 } from '../apiClient';
->>>>>>> node-krisjscott
+
 import '../styles/Admin.css';
 
 // Legacy assets for fallbacks
@@ -48,13 +45,8 @@ import nayoimg from '../assets/nayo.jpg';
 import smitiimg from '../assets/smiti.jpg';
 
 // --- CLOUDINARY CONFIGURATION ---
-<<<<<<< HEAD
-const CLOUD_NAME = "dgmxkx5x8"; // Your new Cloudinary account!
-const UPLOAD_PRESET = "tiesverse_preset"; // 👉 CHANGE THIS to the preset you created
-=======
 const CLOUD_NAME = "dgmxkx5x8"; // 
 const UPLOAD_PRESET = "tiesverse_preset"; // 
->>>>>>> node-krisjscott
 const CLOUDINARY_URL = `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`;
 
 const Admin = () => {
@@ -90,18 +82,6 @@ const Admin = () => {
     // --- AUTH EFFECT ---
     useEffect(() => {
         const checkUser = async () => {
-<<<<<<< HEAD
-            const { data: { session } } = await supabase.auth.getSession();
-            setUser(session?.user ?? null);
-        };
-        checkUser();
-
-        const { data: authListener } = supabase.auth.onAuthStateChange((event, session) => {
-            setUser(session?.user ?? null);
-        });
-
-        return () => authListener.subscription.unsubscribe();
-=======
             const token = localStorage.getItem('token');
             if (!token) { setUser(null); return; }
             const data = await getSession();
@@ -109,7 +89,6 @@ const Admin = () => {
             if (!data.valid) localStorage.removeItem('token');
         };
         checkUser();
->>>>>>> node-krisjscott
     }, []);
 
     // --- HELPERS ---
@@ -166,35 +145,6 @@ const Admin = () => {
         setMobileMenuOpen(false);
     };
 
-<<<<<<< HEAD
-    const fetchData = async () => {
-        setLoading(true);
-        try {
-            const { data: sData } = await supabase.from('site_settings').select('*');
-            if (sData) {
-                    const settingsMap = {};
-                    sData.forEach(s => {
-                        settingsMap[s.key] = Number(s.value);
-                    });
-                    setSiteSettings(prev => ({ ...prev, ...settingsMap }));
-                }
-
-            const { data, error } = await supabase
-                .from(activeTab)
-                .select('*')
-                .order('created_at', { ascending: false });
-
-            if (error) console.error('Error fetching data:', error);
-            else setItems(data);
-
-            if (activeTab === 'workshops') {
-                const { data: eventsData } = await supabase.from('events').select('*').eq('status', 'EVENT ENDED');
-                if (eventsData) {
-                    const { data: existingWorkshops } = await supabase.from('workshops').select('event_id');
-                    const usedEventIds = new Set(existingWorkshops.map(w => w.event_id).filter(Boolean));
-                    const unassigned = eventsData.filter(e => !usedEventIds.has(e.id));
-                    setUnassignedEvents(unassigned);
-=======
     const fetchFnMap = {
         events: getEvents,
         articles: getArticle,
@@ -227,7 +177,6 @@ const Admin = () => {
                     const workshopsData = await getWorkshops();
                     const usedEventIds = new Set((workshopsData || []).map(w => w.event_id).filter(Boolean));
                     setUnassignedEvents(endedEvents.filter(e => !usedEventIds.has(e.id)));
->>>>>>> node-krisjscott
                 }
             }
         } catch (err) {
@@ -253,18 +202,6 @@ const Admin = () => {
     const handleLogin = async (e) => {
         e.preventDefault();
         setLoading(true);
-<<<<<<< HEAD
-        const { error } = await supabase.auth.signInWithPassword({ email, password });
-        if (error) {
-            alert(error.message);
-            setLoading(false);
-        }
-    };
-
-    const handleLogout = async () => { 
-        setLoading(true);
-        await supabase.auth.signOut(); 
-=======
         const data = await login(email, password);
         if (data.error) {
             alert(data.error);
@@ -278,7 +215,6 @@ const Admin = () => {
         setLoading(true);
         await logout();
         setUser(null);
->>>>>>> node-krisjscott
         setLoading(false);
     };
 
@@ -357,18 +293,8 @@ const Admin = () => {
 
         try {
             if (activeTab === 'events' && dataToSave.is_featured) {
-<<<<<<< HEAD
-                const { data: existingFeatured } = await supabase
-                    .from('events')
-                    .select('id, title')
-                    .eq('is_featured', true)
-                    .neq('id', editingId || '00000000-0000-0000-0000-000000000000')
-                    .maybeSingle();
-
-=======
                 const allEvents = await getEvents();
                 const existingFeatured = (allEvents || []).find(e => e.is_featured && e.id !== editingId);
->>>>>>> node-krisjscott
                 if (existingFeatured) {
                     setSwapModal({ open: true, existingId: existingFeatured.id, existingTitle: existingFeatured.title, dataToSave: dataToSave });
                     setLoading(false);
@@ -388,15 +314,6 @@ const Admin = () => {
 
             if (activeTab === 'events' && !dataToSave.status) dataToSave.status = 'REGISTRATION OPEN';
 
-<<<<<<< HEAD
-            if (editingId) {
-                const { error } = await supabase.from(activeTab).update(dataToSave).eq('id', editingId);
-                if (error) showNotice('Error updating: ' + error.message, 'error');
-                else { showNotice('Successfully updated!'); resetForm(); fetchData(); }
-            } else {
-                const { error } = await supabase.from(activeTab).insert([dataToSave]);
-                if (error) showNotice('Error adding: ' + error.message, 'error');
-=======
             const updateFnMap = { events: updateEvent, articles: updateArticle, youtube_videos: updateYoutubeVideo, workshops: updateWorkshop, team: updateMember };
             const createFnMap = { events: createEvent, articles: createArticle, youtube_videos: createYoutubeVideo, workshops: createWorkshop, team: createMember };
 
@@ -407,7 +324,6 @@ const Admin = () => {
             } else {
                 const res = await createFnMap[activeTab](dataToSave);
                 if (res?.error) showNotice('Error adding: ' + res.error, 'error');
->>>>>>> node-krisjscott
                 else { showNotice('Successfully published!'); resetForm(); fetchData(); }
             }
         } catch (err) {
@@ -420,11 +336,7 @@ const Admin = () => {
         setLoading(true);
         const { existingId, dataToSave } = swapModal;
         try {
-<<<<<<< HEAD
-            await supabase.from('events').update({ is_featured: false }).eq('id', existingId);
-=======
             await updateEvent(existingId, { is_featured: false });
->>>>>>> node-krisjscott
 
             let finalData = { ...dataToSave };
             if (formData.imageFile) {
@@ -433,17 +345,10 @@ const Admin = () => {
             }
 
             if (editingId) {
-<<<<<<< HEAD
-                await supabase.from('events').update(finalData).eq('id', editingId);
-                showNotice('Banners swapped successfully!');
-            } else {
-                await supabase.from('events').insert([finalData]);
-=======
                 await updateEvent(editingId, finalData);
                 showNotice('Banners swapped successfully!');
             } else {
                 await createEvent(finalData);
->>>>>>> node-krisjscott
                 showNotice('New banner is now live!');
             }
 
@@ -463,15 +368,9 @@ const Admin = () => {
         if (isNaN(numValue)) { showNotice('Please enter a valid number', 'error'); return; }
 
         setLoading(true);
-<<<<<<< HEAD
-        const { error } = await supabase.from('site_settings').update({ value: numValue }).eq('key', key);
-
-        if (error) { showNotice('Update failed: ' + error.message, 'error'); } 
-=======
         const res = await updateSetting(key, { value: String(numValue) });
 
         if (res?.error) { showNotice('Update failed: ' + res.error, 'error'); }
->>>>>>> node-krisjscott
         else { showNotice('Settings updated successfully!'); fetchData(); }
         setLoading(false);
     };
@@ -487,62 +386,37 @@ const Admin = () => {
     const handleDelete = async () => {
         const { id } = deleteModal;
         setLoading(true);
-<<<<<<< HEAD
-        const { error } = await supabase.from(activeTab).delete().eq('id', id);
-        if (error) showNotice('Error deleting: ' + error.message, 'error');
-        else {
-            showNotice('Entry removed.');
-            if (id === editingId) resetForm(); 
-=======
         const deleteFnMap = { events: deleteEvent, articles: deleteArticle, youtube_videos: deleteYoutubeVideo, workshops: deleteWorkshop, team: deleteMember };
         const res = await deleteFnMap[activeTab](id);
         if (res?.error) showNotice('Error deleting: ' + res.error, 'error');
         else {
             showNotice('Entry removed.');
             if (id === editingId) resetForm();
->>>>>>> node-krisjscott
             fetchData();
         }
         setLoading(false);
         setDeleteModal({ open: false, id: null });
     };
 
-<<<<<<< HEAD
-    // --- MASTER MIGRATION SCRIPT (Migrates all 5 tables) ---
-=======
     // Migrates all 5 tables
->>>>>>> node-krisjscott
     const migrateAllTables = async () => {
         if (!window.confirm("Ready to migrate all images across Events, Articles, YouTube, Workshops, and Team tables to Cloudinary?")) return;
         setLoading(true);
 
         const tablesToMigrate = [
-<<<<<<< HEAD
-            { name: 'events', column: 'image_url' },
-            { name: 'articles', column: 'image_url' },
-            { name: 'youtube_videos', column: 'thumbnail_url' },
-            { name: 'workshops', column: 'image_url' },
-            { name: 'team', column: 'image_url' }
-=======
             { name: 'events',         column: 'image_url',     fetchFn: getEvents,        updateFn: updateEvent },
             { name: 'articles',       column: 'image_url',     fetchFn: getArticle,       updateFn: updateArticle },
             { name: 'youtube_videos', column: 'thumbnail_url', fetchFn: getYoutubeVideos, updateFn: updateYoutubeVideo },
             { name: 'workshops',      column: 'image_url',     fetchFn: getWorkshops,     updateFn: updateWorkshop },
             { name: 'team',           column: 'image_url',     fetchFn: getTeam,          updateFn: updateMember },
->>>>>>> node-krisjscott
         ];
 
         let totalMigrated = 0;
 
         try {
             for (const table of tablesToMigrate) {
-<<<<<<< HEAD
-                const { data: rows } = await supabase.from(table.name).select('*');
-                if (!rows) continue;
-=======
                 const rows = await table.fetchFn();
                 if (!rows || rows.error) continue;
->>>>>>> node-krisjscott
 
                 for (let i = 0; i < rows.length; i++) {
                     const item = rows[i];
@@ -556,17 +430,10 @@ const Admin = () => {
 
                         const res = await fetch(CLOUDINARY_URL, { method: 'POST', body: formData });
                         const cData = await res.json();
-<<<<<<< HEAD
-                        
-                        if (cData.secure_url) {
-                            const newUrl = cData.secure_url.replace('/upload/', '/upload/f_auto,q_auto/');
-                            await supabase.from(table.name).update({ [table.column]: newUrl }).eq('id', item.id);
-=======
 
                         if (cData.secure_url) {
                             const newUrl = cData.secure_url.replace('/upload/', '/upload/f_auto,q_auto/');
                             await table.updateFn(item.id, { [table.column]: newUrl });
->>>>>>> node-krisjscott
                             totalMigrated++;
                         }
                     }
@@ -581,11 +448,8 @@ const Admin = () => {
         }
     };
 
-<<<<<<< HEAD
-=======
     
 
->>>>>>> node-krisjscott
     const renderForm = () => {
         if (activeTab === 'events') {
             return (
