@@ -505,9 +505,9 @@ const Events = () => {
                     </header>
                     <div className="upcoming-list">
                         {visibleEvents.map((event) => (
-                            <EventCard 
-                                key={event.id} 
-                                event={event} 
+                            <EventCard
+                                key={event.id}
+                                event={event}
                                 isExpanded={!!expandedDescriptions[event.id]}
                                 onToggle={toggleDescription}
                                 getFallback={getFallback}
@@ -516,51 +516,12 @@ const Events = () => {
                     </div>
                 </div>
 
-                {/* 01. PODCASTS */}
-                <div className="section-block">
-                    <header className="block-header">
-                        <span className="block-label">01 // AUDIO ARCHIVE</span>
-                        <h2 className="block-title">PODCAST SERIES</h2>
-                    </header>
-                    <div className="podcasts-grid">
-                        {visiblePodcasts.map((item) => (
-                            <PodcastCard key={item.id || item.video_url} item={item} />
-                        ))}
-                    </div>
-                </div>
-
-                {/* 02. SUMMIT SHOWCASE */}
-                <div className="section-block">
-                    <header className="block-header">
-                        <span className="block-label">02 // FEATURED SHOWCASE</span>
-                        <h2 className="block-title">INDIA AI IMPACT SUMMIT</h2>
-                    </header>
-                    <div className="marquee-wrapper">
-                        <div className="marquee-track">
-                            {marqueeContent.map((item) => (
-                                <div key={item.id} className="marquee-item">
-                                    {/* CRITICAL SCROLL FIX: Added decoding="async" so large images don't block the main thread */}
-                                    <img 
-                                        src={item.src} 
-                                        alt="Summit Showcase" 
-                                        className="marquee-img" 
-                                        loading="lazy"
-                                        decoding="async" 
-                                        width="380"
-                                        height="285"
-                                    />
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                </div>
-
-                {/* 03. PATHWAY SELECTION */}
+                {/* 01. PATHWAY SELECTION */}
                 <div ref={workshopRef} className="section-block">
                     {!workshopCategory ? (
                         <>
                             <header className="block-header">
-                                <span className="block-label">03 // ENGAGEMENT FORMAT</span>
+                                <span className="block-label">01 // ENGAGEMENT FORMAT</span>
                                 <h2 className="block-title">SELECT PATHWAY</h2>
                             </header>
                             <div className="minimal-pathway-grid">
@@ -592,6 +553,44 @@ const Events = () => {
                             </div>
                         </div>
                     )}
+                </div>
+
+                {/* 02. PODCASTS */}
+                <div className="section-block">
+                    <header className="block-header">
+                        <span className="block-label">02 // AUDIO ARCHIVE</span>
+                        <h2 className="block-title">PODCAST SERIES</h2>
+                    </header>
+                    <div className="podcasts-grid">
+                        {visiblePodcasts.map((item) => (
+                            <PodcastCard key={item.id || item.video_url} item={item} />
+                        ))}
+                    </div>
+                </div>
+
+                {/* 03. SUMMIT SHOWCASE */}
+                <div className="section-block">
+                    <header className="block-header">
+                        <span className="block-label">03 // FEATURED SHOWCASE</span>
+                        <h2 className="block-title">INDIA AI IMPACT SUMMIT</h2>
+                    </header>
+                    <div className="marquee-wrapper">
+                        <div className="marquee-track">
+                            {marqueeContent.map((item) => (
+                                <div key={item.id} className="marquee-item">
+                                    <img
+                                        src={item.src}
+                                        alt="Summit Showcase"
+                                        className="marquee-img"
+                                        loading="lazy"
+                                        decoding="async"
+                                        width="380"
+                                        height="285"
+                                    />
+                                </div>
+                            ))}
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
