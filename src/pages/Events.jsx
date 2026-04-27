@@ -1,5 +1,5 @@
-import React, { useState, useRef, useEffect, useMemo, useCallback, memo } from 'react';
-import { getEvents, getYoutubeVideos, getWorkshops, getSettings } from '../apiClient';
+import React, { useState, useEffect, useMemo, useCallback, memo } from 'react';
+import { getEvents, getYoutubeVideos, getWorkshops, getSettings, getGuests } from '../apiClient';
 import '../styles/Events.css';
 
 // Asset imports (DON'T TOUCH)
@@ -185,78 +185,148 @@ const STATIC_CSS = `
   .meta-tag { color: var(--accent); font-weight: 800; font-size: 10px; letter-spacing: 1.5px; }
   .podcast-title { font-size: 17px; color: #fff; margin: 10px 0 0 0; font-weight: 700; line-height: 1.3; }
 
-  /* ── PATHWAY BRICKS (Updated Design) ── */
-  .minimal-pathway-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-  .pathway-brick { 
-    background: var(--card-bg); 
-    padding: 48px 38px; border-radius: 14px; 
-    border: 1px solid var(--border); 
-    cursor: pointer; position: relative; overflow: hidden;
-    transition: border-color 0.35s ease, transform 0.35s ease, background 0.35s ease;
+  /* ── EDITORIAL DUAL-PANEL CARDS ── */
+  .editorial-cards-stack { display: flex; flex-direction: column; gap: 20px; }
+
+  .editorial-card {
+    display: grid; grid-template-columns: 1fr 1.25fr;
+    min-height: 340px; border-radius: 16px; overflow: hidden;
+    border: 1px solid var(--border);
+    transition: border-color 0.35s ease, transform 0.35s ease;
   }
-  .pathway-brick::before {
+  .editorial-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+
+  .ed-left {
+    background: #080808; padding: 40px 38px;
+    display: flex; flex-direction: column; justify-content: space-between;
+    position: relative; z-index: 2;
+  }
+  .ed-left::after {
+    content: ''; position: absolute; right: 0; top: 10%; bottom: 10%;
+    width: 1px; background: linear-gradient(to bottom, transparent, var(--border), transparent);
+  }
+  .ed-eyebrow {
+    font-size: 10px; font-weight: 800; letter-spacing: 3px;
+    color: var(--accent); text-transform: uppercase; margin-bottom: 24px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .ed-eyebrow::before { content: ''; width: 20px; height: 2px; background: var(--accent); flex-shrink: 0; }
+  .ed-headline {
+    font-size: clamp(28px, 3.5vw, 42px); font-weight: 900; line-height: 1.0;
+    letter-spacing: -1.5px; color: #fff; margin: 0 0 16px 0;
+  }
+  .ed-body {
+    font-size: 13px; color: var(--text-dim); line-height: 1.75; flex: 1; margin: 16px 0 28px;
+  }
+  .ed-counter {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 10px; font-weight: 800; letter-spacing: 2px;
+    color: var(--accent); border: 1px solid rgba(254, 122, 0, 0.25);
+    padding: 8px 18px; border-radius: 20px; width: fit-content;
+    background: rgba(254, 122, 0, 0.05);
+  }
+
+  /* ── ORANGE RIGHT PANEL ── */
+  .ed-right {
+    position: relative; overflow: hidden;
+    background: linear-gradient(135deg, #FE7A00 0%, #b84f00 100%);
+    padding: 28px; display: flex; align-items: center; justify-content: center;
+  }
+  .ed-right::before {
     content: '';
-    position: absolute; top: 0; left: 0; right: 0; 
-    height: 3px; background: var(--accent);
-    transform: scaleX(0); transform-origin: left;
-    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    position: absolute; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.07'/%3E%3C/svg%3E");
+    pointer-events: none; z-index: 1;
   }
-  .pathway-brick:hover { 
-    border-color: var(--border-hover); 
-    background: #111; 
-    transform: translateY(-3px); 
-  }
-  .pathway-brick:hover::before { transform: scaleX(1); }
+  .ed-right-inner { position: relative; z-index: 2; width: 100%; height: 100%; display: flex; align-items: center; }
 
-  .brick-number { 
-    position: absolute; top: 18px; right: 28px; 
-    font-size: 48px; font-weight: 900; 
-    color: var(--accent); opacity: 0.06;
-    line-height: 1; pointer-events: none;
+  /* ── GUEST MOSAIC ── */
+  .guest-mosaic {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; width: 100%;
   }
-  .brick-icon {
-    width: 40px; height: 40px; border-radius: 10px;
-    background: var(--accent-glow); 
-    display: flex; align-items: center; justify-content: center;
-    margin-bottom: 20px; font-size: 18px;
-    border: 1px solid rgba(254, 122, 0, 0.2);
+  .guest-tile {
+    position: relative; border-radius: 10px; overflow: hidden;
+    aspect-ratio: 3/4; background: rgba(0,0,0,0.25);
+    border: 2px solid rgba(255,255,255,0.15);
+    transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
   }
-  .brick-title { font-size: 22px; font-weight: 800; color: #fff; letter-spacing: -0.3px; }
-  .brick-desc { color: var(--text-dim); margin: 12px 0 24px 0; font-size: 13px; line-height: 1.6; }
-  .brick-cta { 
-    color: var(--accent); font-weight: 800; font-size: 11px; letter-spacing: 1.5px;
-    display: inline-flex; align-items: center; gap: 6px;
-    transition: gap 0.25s ease;
+  .guest-tile:hover {
+    transform: scale(1.04) translateY(-3px);
+    border-color: rgba(255,255,255,0.55);
+    box-shadow: 0 12px 28px rgba(0,0,0,0.45);
   }
-  .pathway-brick:hover .brick-cta { gap: 10px; }
+  .guest-tile img { width: 100%; height: 100%; object-fit: cover; object-position: center top; }
+  .guest-tile-overlay {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, transparent 100%);
+    padding: 20px 10px 10px; z-index: 2;
+  }
+  .guest-tile-name { font-size: 11px; font-weight: 800; color: #fff; letter-spacing: 0.3px; line-height: 1.2; }
+  .guest-tile-role { font-size: 9px; color: rgba(255,255,255,0.65); margin-top: 3px; letter-spacing: 0.5px; }
 
-  .back-btn {
-    background: var(--accent); color: #000; border: none;
-    padding: 11px 22px; border-radius: 6px; font-weight: 800;
-    cursor: pointer; margin-bottom: 30px; font-size: 12px;
-    letter-spacing: 0.5px;
-    transition: background 0.25s ease, transform 0.25s ease;
+  /* ── WEBINAR MOSAIC ── */
+  .webinar-mosaic {
+    display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; width: 100%;
   }
-  .back-btn:hover { background: #fff; transform: scale(1.03); }
+  .webinar-tile {
+    position: relative; border-radius: 10px; overflow: hidden;
+    aspect-ratio: 16/9; background: rgba(0,0,0,0.25);
+    border: 2px solid rgba(255,255,255,0.15);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: default;
+  }
+  .webinar-tile:hover { transform: scale(1.03); box-shadow: 0 10px 24px rgba(0,0,0,0.4); }
+  .webinar-tile img { width: 100%; height: 100%; object-fit: cover; }
+  .webinar-play {
+    position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+    background: rgba(0,0,0,0.3); z-index: 2; transition: background 0.25s ease;
+  }
+  .webinar-tile:hover .webinar-play { background: rgba(0,0,0,0.1); }
+  .webinar-play-circle {
+    width: 34px; height: 34px; border-radius: 50%;
+    background: rgba(255,255,255,0.92); display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.35);
+  }
+  .webinar-play-circle svg { width: 14px; height: 14px; fill: #000; margin-left: 2px; }
+  .webinar-tile-label {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
+    padding: 18px 10px 8px; font-size: 10px; font-weight: 700;
+    color: #fff; z-index: 3; letter-spacing: 0.5px; line-height: 1.3;
+  }
+
+  /* Empty placeholder tiles */
+  .mosaic-placeholder {
+    border-radius: 10px; border: 1.5px dashed rgba(255,255,255,0.2);
+    background: rgba(0,0,0,0.15); display: flex; align-items: center; justify-content: center;
+    font-size: 10px; color: rgba(255,255,255,0.3); letter-spacing: 2px; text-transform: uppercase;
+    aspect-ratio: 3/4;
+  }
+  .mosaic-placeholder.wide { aspect-ratio: 16/9; }
 
   /* ── RESPONSIVE ── */
   @media (max-width: 850px) {
     .upcoming-card { flex-direction: column; }
     .upcoming-visual { flex: 0 0 220px; }
     .upcoming-info { padding: 24px 20px; }
-    .minimal-pathway-grid { grid-template-columns: 1fr; }
     .event-datetime { margin-left: 0; margin-top: 5px; }
     .event-title { font-size: 20px; }
     .marquee-item { width: 300px; }
+    .editorial-card { grid-template-columns: 1fr; }
+    .ed-left { padding: 28px 24px; }
+    .ed-left::after { display: none; }
+    .ed-right { min-height: 260px; padding: 20px; }
+    .guest-mosaic { grid-template-columns: repeat(3, 1fr); gap: 8px; }
+    .webinar-mosaic { grid-template-columns: repeat(2, 1fr); gap: 8px; }
   }
 
   @media (max-width: 480px) {
     .events-section { padding: 40px 0; }
     .section-block { margin-bottom: 60px; }
     .upcoming-visual { flex: 0 0 180px; }
-    .pathway-brick { padding: 35px 28px; }
-    .brick-title { font-size: 19px; }
     .marquee-item { width: 260px; margin: 0 8px; }
+    .ed-headline { font-size: 24px; }
+    .guest-mosaic { grid-template-columns: repeat(2, 1fr); }
   }
 
   /* ── iOS Safari fixes ── */
@@ -371,22 +441,18 @@ function useThrottledResize(callback, delay = 200) {
 // MAIN COMPONENT
 // ============================================================
 const Events = () => {
-    const [workshopCategory, setWorkshopCategory] = useState(null);
-    const [activeWorkshop, setActiveWorkshop] = useState(null);
     const [expandedDescriptions, setExpandedDescriptions] = useState({});
     const [loading, setLoading] = useState(true);
     const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
     const [data, setData] = useState({
         events: [],
         podcasts: [],
-        virtual: [],
-        inPerson: []
+        guests: [],
+        webinars: []
     });
-    const [displayLimits, setDisplayLimits] = useState({ 
-        pc: 2, mobile: 1, pcYT: 3, mobileYT: 2 
+    const [displayLimits, setDisplayLimits] = useState({
+        pc: 2, mobile: 1, pcYT: 3, mobileYT: 2
     });
-    
-    const workshopRef = useRef(null);
 
     // --- PERF FIX #3 applied: throttled resize ---
     const handleResize = useCallback(() => {
@@ -414,11 +480,12 @@ const Events = () => {
         const fetchAllData = async () => {
             setLoading(true);
             try {
-                const [settingsRes, eventsRes, youtubeRes, workshopsRes] = await Promise.all([
+                const [settingsRes, eventsRes, youtubeRes, workshopsRes, guestsRes] = await Promise.all([
                     getSettings(),
                     getEvents(),
                     getYoutubeVideos(),
-                    getWorkshops()
+                    getWorkshops(),
+                    getGuests()
                 ]);
 
                 if (settingsRes && !settingsRes.error) {
@@ -434,8 +501,8 @@ const Events = () => {
                 setData({
                     events: (eventsRes || []).map(e => ({ ...e, img: getFallback(e, 'event') })),
                     podcasts: (youtubeRes || []).map(p => ({ ...p, img: getFallback(p, 'podcast'), tag: p.category || 'STRATEGY' })),
-                    virtual: (workshopsRes || []).filter(w => w.category === 'VIRTUAL').map(w => ({ ...w, img: getFallback(w, 'workshop'), tag: w.tag || 'VIRTUAL' })),
-                    inPerson: (workshopsRes || []).filter(w => w.category === 'IN_PERSON').map(w => ({ ...w, img: getFallback(w, 'workshop'), tag: w.tag || 'FIELD' }))
+                    guests: (guestsRes && !guestsRes.error) ? guestsRes : [],
+                    webinars: (workshopsRes || []).filter(w => w.category === 'WEBINAR').map(w => ({ ...w, img: getFallback(w, 'workshop') }))
                 });
 
             } catch (err) {
@@ -451,12 +518,6 @@ const Events = () => {
     // --- UI LOGIC ---
     const toggleDescription = useCallback((id) => {
         setExpandedDescriptions(prev => ({ ...prev, [id]: !prev[id] }));
-    }, []);
-
-    const handleCategorySelect = useCallback((category) => {
-        setWorkshopCategory(category);
-        setActiveWorkshop(null);
-        setTimeout(() => workshopRef.current?.scrollIntoView({ behavior: 'smooth' }), 50);
     }, []);
 
     // --- MEMOIZED MARQUEE DATA ---
@@ -477,11 +538,6 @@ const Events = () => {
     const visiblePodcasts = useMemo(() => 
         data.podcasts.slice(0, isMobile ? displayLimits.mobileYT : displayLimits.pcYT),
         [data.podcasts, isMobile, displayLimits.mobileYT, displayLimits.pcYT]
-    );
-
-    const activeWorkshops = useMemo(() => 
-        workshopCategory === 'VIRTUAL' ? data.virtual : data.inPerson,
-        [workshopCategory, data.virtual, data.inPerson]
     );
 
     if (loading) return <div className="loader-screen"><div className="loader-bar"></div></div>;
@@ -516,43 +572,106 @@ const Events = () => {
                     </div>
                 </div>
 
-                {/* 01. PATHWAY SELECTION */}
-                <div ref={workshopRef} className="section-block">
-                    {!workshopCategory ? (
-                        <>
-                            <header className="block-header">
-                                <span className="block-label">01 // ENGAGEMENT FORMAT</span>
-                                <h2 className="block-title">SELECT PATHWAY</h2>
-                            </header>
-                            <div className="minimal-pathway-grid">
-                                <div className="pathway-brick" onClick={() => handleCategorySelect('VIRTUAL')}>
-                                    <div className="brick-number">01</div>
-                                    <div className="brick-icon">&#9672;</div>
-                                    <h3 className="brick-title">VIRTUAL WORKSHOP</h3>
-                                    <p className="brick-desc">Global digital summits and interactive strategy sessions.</p>
-                                    <span className="brick-cta">ENTER PORTAL <span>&rarr;</span></span>
+                {/* 01. PREVIOUS GUESTS + WEBINARS */}
+                <div className="section-block">
+                    <header className="block-header">
+                        <span className="block-label">01 // FEATURED ENGAGEMENTS</span>
+                        <h2 className="block-title">OUR NETWORK</h2>
+                    </header>
+
+                    <div className="editorial-cards-stack">
+
+                        {/* — CARD A: PREVIOUS GUESTS — */}
+                        <div className="editorial-card">
+                            <div className="ed-left">
+                                <div>
+                                    <div className="ed-eyebrow">GUEST SPEAKERS</div>
+                                    <h2 className="ed-headline">OUR<br/>PREVIOUS<br/>GUESTS</h2>
+                                    <p className="ed-body">
+                                        Leaders, scholars, and voices who have joined us across summits,
+                                        panels, and editorial sessions — shaping discourse at the intersection
+                                        of geopolitics, media, and technology.
+                                    </p>
                                 </div>
-                                <div className="pathway-brick" onClick={() => handleCategorySelect('IN_PERSON')}>
-                                    <div className="brick-number">02</div>
-                                    <div className="brick-icon">&#9670;</div>
-                                    <h3 className="brick-title">IN-PERSON FIELD</h3>
-                                    <p className="brick-desc">On-ground training and diplomatic simulations.</p>
-                                    <span className="brick-cta">COORDINATE FIELD <span>&rarr;</span></span>
+                                <div className="ed-counter">
+                                    ◈ &nbsp;{data.guests.length} GUESTS FEATURED
                                 </div>
                             </div>
-                        </>
-                    ) : (
-                        <div className="list-interface">
-                            <button className="back-btn" onClick={() => setWorkshopCategory(null)}>
-                                &larr; BACK TO SELECTION
-                            </button>
-                            <div className="podcasts-grid">
-                                {activeWorkshops.map((item) => (
-                                    <WorkshopCard key={item.id} item={item} />
-                                ))}
+                            <div className="ed-right">
+                                <div className="ed-right-inner">
+                                    {data.guests.length > 0 ? (
+                                        <div className="guest-mosaic">
+                                            {data.guests.slice(0, 6).map((g) => (
+                                                <div key={g.id} className="guest-tile">
+                                                    <img src={g.image_url} alt={g.name} loading="lazy" />
+                                                    <div className="guest-tile-overlay">
+                                                        <div className="guest-tile-name">{g.name}</div>
+                                                        {g.role && <div className="guest-tile-role">{g.role}</div>}
+                                                    </div>
+                                                </div>
+                                            ))}
+                                            {data.guests.length < 6 && Array.from({ length: 6 - data.guests.length }).map((_, i) => (
+                                                <div key={`ph-${i}`} className="mosaic-placeholder" />
+                                            ))}
+                                        </div>
+                                    ) : (
+                                        <div className="guest-mosaic">
+                                            {Array.from({ length: 6 }).map((_, i) => (
+                                                <div key={i} className="mosaic-placeholder" />
+                                            ))}
+                                        </div>
+                                    )}
+                                </div>
                             </div>
                         </div>
-                    )}
+
+                        {/* — CARD B: WEBINARS — */}
+                        <div className="editorial-card">
+                            <div className="ed-left">
+                                <div>
+                                    <div className="ed-eyebrow">DIGITAL SESSIONS</div>
+                                    <h2 className="ed-headline">WEBINARS<br/>&amp; ONLINE<br/>PROGRAMMES</h2>
+                                    <p className="ed-body">
+                                        Structured online learning sessions hosted by Tiesverse — covering
+                                        strategic communication, research methods, and policy frameworks
+                                        for the next generation.
+                                    </p>
+                                </div>
+                                <div className="ed-counter">
+                                    ▣ &nbsp;{data.webinars.length} SESSIONS ARCHIVED
+                                </div>
+                            </div>
+                            <div className="ed-right">
+                                <div className="ed-right-inner">
+                                    {data.webinars.length > 0 ? (
+                                        <div className="webinar-mosaic">
+                                            {data.webinars.slice(0, 4).map((w) => (
+                                                <div key={w.id} className="webinar-tile">
+                                                    <img src={w.img} alt={w.title} loading="lazy" />
+                                                    <div className="webinar-play">
+                                                        <div className="webinar-play-circle">
+                                                            <svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21" /></svg>
+                                                        </div>
+                                                    </div>
+                                                    <div className="webinar-tile-label">{w.title}</div>
+                                                </div>
+                                            ))}
+                                            {data.webinars.length < 4 && Array.from({ length: 4 - data.webinars.length }).map((_, i) => (
+                                                <div key={`wph-${i}`} className="mosaic-placeholder wide" />
+                                            ))}
+                                        </div>
+                                    ) : (
+                                        <div className="webinar-mosaic">
+                                            {Array.from({ length: 4 }).map((_, i) => (
+                                                <div key={i} className="mosaic-placeholder wide" />
+                                            ))}
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
                 </div>
 
                 {/* 02. PODCASTS */}

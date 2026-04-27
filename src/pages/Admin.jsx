@@ -7,7 +7,8 @@ import {
     getWorkshops, createWorkshop, updateWorkshop, deleteWorkshop,
     getTeam, createMember, updateMember, deleteMember,
     getSettings, updateSetting,
-    getCloudinaryImages, deleteCloudinaryImage
+    getCloudinaryImages, deleteCloudinaryImage,
+    getGuests, createGuest, updateGuest, deleteGuest
 } from '../apiClient';
 
 import '../styles/Admin.css';
@@ -128,6 +129,7 @@ const Admin = () => {
 
     // --- HELPERS ---
     const getThumbnailFallback = (item) => {
+        if (activeTab === 'guests') return item.image_url || null;
         if (item.image_url || item.thumbnail_url) return item.image_url || item.thumbnail_url;
         if (activeTab === 'youtube_videos') {
             if (item.episode_id === 'EP.01') return yt1;
@@ -186,6 +188,7 @@ const Admin = () => {
         youtube_videos: getYoutubeVideos,
         workshops: getWorkshops,
         team: getTeam,
+        guests: getGuests,
     };
 
     const fetchData = async () => {
@@ -267,8 +270,8 @@ const Admin = () => {
             img.onload = () => {
                 let expectedRatio, ratioLabel;
 
-                if (activeTab === 'articles' || activeTab === 'team') {
-                    expectedRatio = 4 / 5; 
+                if (activeTab === 'articles' || activeTab === 'team' || activeTab === 'guests') {
+                    expectedRatio = 4 / 5;
                     ratioLabel = '4:5';
                 } else {
                     expectedRatio = 3 / 2; 
@@ -348,10 +351,10 @@ const Admin = () => {
             }
 
             if (activeTab === 'events' && !dataToSave.status) dataToSave.status = 'REGISTRATION OPEN';
-            if (activeTab === 'workshops' && !dataToSave.category) dataToSave.category = 'VIRTUAL';
+            if (activeTab === 'workshops' && !dataToSave.category) dataToSave.category = 'WEBINAR';
 
-            const updateFnMap = { events: updateEvent, articles: updateArticle, youtube_videos: updateYoutubeVideo, workshops: updateWorkshop, team: updateMember };
-            const createFnMap = { events: createEvent, articles: createArticle, youtube_videos: createYoutubeVideo, workshops: createWorkshop, team: createMember };
+            const updateFnMap = { events: updateEvent, articles: updateArticle, youtube_videos: updateYoutubeVideo, workshops: updateWorkshop, team: updateMember, guests: updateGuest };
+            const createFnMap = { events: createEvent, articles: createArticle, youtube_videos: createYoutubeVideo, workshops: createWorkshop, team: createMember, guests: createGuest };
 
             if (editingId) {
                 const res = await updateFnMap[activeTab](editingId, dataToSave);
@@ -426,7 +429,7 @@ const Admin = () => {
         const item = items.find(i => i.id === id);
         const imageUrl = item?.image_url || item?.thumbnail_url;
 
-        const deleteFnMap = { events: deleteEvent, articles: deleteArticle, youtube_videos: deleteYoutubeVideo, workshops: deleteWorkshop, team: deleteMember };
+        const deleteFnMap = { events: deleteEvent, articles: deleteArticle, youtube_videos: deleteYoutubeVideo, workshops: deleteWorkshop, team: deleteMember, guests: deleteGuest };
         const res = await deleteFnMap[activeTab](id);
         if (res?.error) showNotice('Error deleting: ' + res.error, 'error');
         else {
@@ -455,6 +458,7 @@ const Admin = () => {
             { name: 'youtube_videos', column: 'thumbnail_url', fetchFn: getYoutubeVideos, updateFn: updateYoutubeVideo },
             { name: 'workshops',      column: 'image_url',     fetchFn: getWorkshops,     updateFn: updateWorkshop },
             { name: 'team',           column: 'image_url',     fetchFn: getTeam,          updateFn: updateMember },
+            { name: 'guests',         column: 'image_url',     fetchFn: getGuests,        updateFn: updateGuest },
         ];
 
         let totalMigrated = 0;
@@ -601,6 +605,30 @@ const Admin = () => {
                     </div>
                 </div>
             );
+        } else if (activeTab === 'guests') {
+            return (
+                <div className="form-grid">
+                    <div className="input-group"><label>Guest Name</label><input type="text" name="name" value={formData.name || ''} onChange={handleInputChange} required /></div>
+                    <div className="input-group"><label>Role / Organisation</label><input type="text" name="role" value={formData.role || ''} onChange={handleInputChange} /></div>
+                    <div className="input-group"><label>Short Description (optional)</label><textarea name="description" value={formData.description || ''} onChange={handleInputChange} rows="2" /></div>
+                    <div className="input-group">
+                        <label style={{ color: 'var(--accent-orange)' }}>PORTRAIT PHOTO — 4:5 RATIO</label>
+                        <div className="upload-container">
+                            {previewUrl && (
+                                <div className="image-preview" style={{ width: '160px', aspectRatio: '4/5', marginBottom: '12px' }}>
+                                    <img src={previewUrl} alt="prev" style={{ objectFit: 'cover', objectPosition: 'center top', width: '100%', height: '100%', borderRadius: '8px' }} />
+                                </div>
+                            )}
+                            <button type="button" onClick={openCloudinaryPicker} style={{ width: '100%', padding: '12px', background: '#111', color: '#fff', border: '1px solid #333', fontFamily: 'inherit', fontWeight: '700', letterSpacing: '1px', fontSize: '11px', cursor: 'pointer', marginBottom: '8px' }}>
+                                📂 BROWSE CLOUDINARY LIBRARY
+                            </button>
+                            <div style={{ textAlign: 'center', color: '#555', fontSize: '10px', fontWeight: '800', margin: '6px 0', letterSpacing: '2px' }}>— OR UPLOAD NEW —</div>
+                            <input type="file" accept="image/*" onChange={handleFileChange} />
+                            <p className="upload-hint">Portrait photo. 4:5 aspect ratio recommended.</p>
+                        </div>
+                    </div>
+                </div>
+            );
         } else if (activeTab === 'team') {
             return (
                 <div className="form-grid">
@@ -672,7 +700,8 @@ const Admin = () => {
                     <div className="input-row">
                         <div className="input-group">
                             <label>Category</label>
-                            <select name="category" value={formData.category || 'VIRTUAL'} onChange={handleInputChange}>
+                            <select name="category" value={formData.category || 'WEBINAR'} onChange={handleInputChange}>
+                                <option value="WEBINAR">WEBINAR</option>
                                 <option value="VIRTUAL">VIRTUAL</option>
                                 <option value="IN_PERSON">IN_PERSON</option>
                             </select>
@@ -782,6 +811,9 @@ const Admin = () => {
                     </button>
                     <button className={activeTab === 'team' ? 'nav-item active' : 'nav-item'} onClick={() => setActiveTab('team')}>
                         <span>👥</span> {!isCollapsed && "TEAM"}
+                    </button>
+                    <button className={activeTab === 'guests' ? 'nav-item active' : 'nav-item'} onClick={() => setActiveTab('guests')}>
+                        <span>🎙️</span> {!isCollapsed && "GUESTS"}
                     </button>
                 </nav>
             </aside>
@@ -908,6 +940,7 @@ const Admin = () => {
                             {activeTab === 'workshops' && (
                                 <div className="workshop-filter-bar">
                                     <button className={workshopFilter === 'ALL' ? 'active' : ''} onClick={() => setWorkshopFilter('ALL')}>ALL</button>
+                                    <button className={workshopFilter === 'WEBINAR' ? 'active' : ''} onClick={() => setWorkshopFilter('WEBINAR')}>WEBINAR</button>
                                     <button className={workshopFilter === 'VIRTUAL' ? 'active' : ''} onClick={() => setWorkshopFilter('VIRTUAL')}>VIRTUAL</button>
                                     <button className={workshopFilter === 'IN_PERSON' ? 'active' : ''} onClick={() => setWorkshopFilter('IN_PERSON')}>IN-PERSON</button>
                                 </div>

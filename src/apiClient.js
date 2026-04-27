@@ -104,6 +104,17 @@ export const updateSetting = (key, data) => adminFetch(`/api/settings/${key}`, '
 
 export const getTeam = () => publicFetch('/api/team');
 
+// GUESTS
+
+export const getGuests = () => publicFetch('/api/guests');
+
+export const createGuest = (data) => adminFetch('/api/guests', 'POST', data);
+
+export const updateGuest = (id, data) => adminFetch(`/api/guests/${id}`, 'PUT', data);
+
+export const deleteGuest = (id) => adminFetch(`/api/guests/${id}`, 'DELETE');
+
+
 // CLOUDINARY
 
 export const getCloudinaryImages = () => adminFetch('/api/cloudinary/images');
