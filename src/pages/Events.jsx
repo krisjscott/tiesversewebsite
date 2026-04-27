@@ -305,45 +305,50 @@ const STATIC_CSS = `
 
   /* ── NETWORK IMAGE STRIP ── */
   .network-strip-wrap {
-    margin-top: 28px;
-    position: relative;
+    margin-bottom: 0;
   }
-  .network-strip-label {
-    font-size: 10px; font-weight: 800; letter-spacing: 3px;
-    color: var(--accent); text-transform: uppercase; margin-bottom: 14px;
-    display: flex; align-items: center; gap: 8px;
-  }
-  .network-strip-label::before { content: ''; width: 16px; height: 2px; background: var(--accent); flex-shrink: 0; }
   .network-strip {
     display: flex;
-    gap: 12px;
+    gap: 14px;
     overflow-x: auto;
-    padding-bottom: 10px;
+    padding-bottom: 12px;
     scroll-behavior: smooth;
     -webkit-overflow-scrolling: touch;
     cursor: grab;
+    user-select: none;
   }
   .network-strip:active { cursor: grabbing; }
   .network-strip::-webkit-scrollbar { height: 3px; }
   .network-strip::-webkit-scrollbar-track { background: rgba(255,255,255,0.04); border-radius: 2px; }
   .network-strip::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 2px; }
+  .network-img-item { flex-shrink: 0; }
   .network-img-tile {
-    flex-shrink: 0;
-    width: 200px;
-    aspect-ratio: 1/1;
-    border-radius: 10px;
+    width: 300px;
+    aspect-ratio: 3/4;
+    border-radius: 12px;
     overflow: hidden;
     border: 1px solid rgba(255,255,255,0.1);
     background: rgba(0,0,0,0.3);
     transition: border-color 0.3s ease, transform 0.3s ease;
   }
   .network-img-tile:hover { border-color: rgba(255,255,255,0.4); transform: scale(1.03); }
-  .network-img-tile img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .network-img-tile img { width: 100%; height: 100%; object-fit: cover; object-position: center top; display: block; }
   .network-img-caption {
     font-size: 9px; font-weight: 700; letter-spacing: 0.5px;
-    color: rgba(255,255,255,0.5); margin-top: 6px; text-align: center;
+    color: rgba(255,255,255,0.5); margin-top: 8px; text-align: center;
     text-transform: uppercase; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-    width: 200px;
+    width: 300px;
+  }
+  .network-sub-divider {
+    display: flex; align-items: center; gap: 16px;
+    margin: 50px 0 0 0;
+  }
+  .network-sub-divider::before, .network-sub-divider::after {
+    content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.07);
+  }
+  .network-sub-divider span {
+    font-size: 10px; font-weight: 800; letter-spacing: 3px;
+    color: rgba(255,255,255,0.25); text-transform: uppercase; white-space: nowrap;
   }
 
   /* Empty placeholder tiles */
@@ -627,12 +632,52 @@ const Events = () => {
                     </div>
                 </div>
 
-                {/* 01. PREVIOUS GUESTS + WEBINARS */}
+                {/* 01. NETWORK + GUESTS + WEBINARS */}
                 <div className="section-block">
                     <header className="block-header">
                         <span className="block-label">01 // FEATURED ENGAGEMENTS</span>
                         <h2 className="block-title">OUR NETWORK</h2>
                     </header>
+
+                    {/* — NETWORK IMAGE STRIP — */}
+                    {data.networkImages.length > 0 && (
+                        <div className="network-strip-wrap">
+                            <div
+                                className="network-strip"
+                                onMouseDown={(e) => {
+                                    const el = e.currentTarget;
+                                    el.dataset.dragging = 'true';
+                                    el.dataset.startX = e.pageX - el.offsetLeft;
+                                    el.dataset.scrollLeft = el.scrollLeft;
+                                }}
+                                onMouseMove={(e) => {
+                                    const el = e.currentTarget;
+                                    if (el.dataset.dragging !== 'true') return;
+                                    e.preventDefault();
+                                    const x = e.pageX - el.offsetLeft;
+                                    el.scrollLeft = Number(el.dataset.scrollLeft) - (x - Number(el.dataset.startX));
+                                }}
+                                onMouseUp={(e) => { e.currentTarget.dataset.dragging = 'false'; }}
+                                onMouseLeave={(e) => { e.currentTarget.dataset.dragging = 'false'; }}
+                            >
+                                {data.networkImages.map((img) => (
+                                    <div key={img.id} className="network-img-item">
+                                        <div className="network-img-tile">
+                                            <img src={img.image_url} alt={img.caption || 'Network'} loading="lazy" draggable="false" />
+                                        </div>
+                                        {img.caption && <div className="network-img-caption">{img.caption}</div>}
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    )}
+
+                    {/* — DIVIDER LABEL before editorial cards — */}
+                    {data.networkImages.length > 0 && (
+                        <div className="network-sub-divider">
+                            <span>GUEST SPEAKERS &amp; DIGITAL SESSIONS</span>
+                        </div>
+                    )}
 
                     <div className="editorial-cards-stack">
 
@@ -728,40 +773,6 @@ const Events = () => {
                         </div>
 
                     </div>
-
-                    {/* — NETWORK IMAGE STRIP — */}
-                    {data.networkImages.length > 0 && (
-                        <div className="network-strip-wrap">
-                            <div className="network-strip-label">OUR NETWORK // IMAGES</div>
-                            <div
-                                className="network-strip"
-                                onMouseDown={(e) => {
-                                    const el = e.currentTarget;
-                                    el.dataset.dragging = 'true';
-                                    el.dataset.startX = e.pageX - el.offsetLeft;
-                                    el.dataset.scrollLeft = el.scrollLeft;
-                                }}
-                                onMouseMove={(e) => {
-                                    const el = e.currentTarget;
-                                    if (el.dataset.dragging !== 'true') return;
-                                    e.preventDefault();
-                                    const x = e.pageX - el.offsetLeft;
-                                    el.scrollLeft = el.dataset.scrollLeft - (x - el.dataset.startX);
-                                }}
-                                onMouseUp={(e) => { e.currentTarget.dataset.dragging = 'false'; }}
-                                onMouseLeave={(e) => { e.currentTarget.dataset.dragging = 'false'; }}
-                            >
-                                {data.networkImages.map((img) => (
-                                    <div key={img.id}>
-                                        <div className="network-img-tile">
-                                            <img src={img.image_url} alt={img.caption || 'Network'} loading="lazy" draggable="false" />
-                                        </div>
-                                        {img.caption && <div className="network-img-caption">{img.caption}</div>}
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-                    )}
                 </div>
 
                 {/* 02. PODCASTS */}
