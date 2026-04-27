@@ -20,7 +20,12 @@ const adminFetch = async (path, method = 'GET', body = null) => {
     };
     if (body) options.body = JSON.stringify(body);
     const res = await fetch(`${API_URL}${path}`, options);
-    return res.json();
+    const text = await res.text();
+    try {
+        return JSON.parse(text);
+    } catch {
+        return { error: `Server error (${res.status}) — route may not exist or server needs restart. Response: ${text.slice(0, 120)}` };
+    }
 };
 
 
@@ -113,6 +118,17 @@ export const createGuest = (data) => adminFetch('/api/guests', 'POST', data);
 export const updateGuest = (id, data) => adminFetch(`/api/guests/${id}`, 'PUT', data);
 
 export const deleteGuest = (id) => adminFetch(`/api/guests/${id}`, 'DELETE');
+
+
+// NETWORK IMAGES
+
+export const getNetworkImages = () => publicFetch('/api/network');
+
+export const createNetworkImage = (data) => adminFetch('/api/network', 'POST', data);
+
+export const updateNetworkImage = (id, data) => adminFetch(`/api/network/${id}`, 'PUT', data);
+
+export const deleteNetworkImage = (id) => adminFetch(`/api/network/${id}`, 'DELETE');
 
 
 // CLOUDINARY

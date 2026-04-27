@@ -4,11 +4,12 @@ import {
     getEvents, createEvent, updateEvent, deleteEvent,
     getArticle, createArticle, updateArticle, deleteArticle,
     getYoutubeVideos, createYoutubeVideo, updateYoutubeVideo, deleteYoutubeVideo,
-    getWorkshops, createWorkshop, updateWorkshop, deleteWorkshop,
+    getWorkshops, getWorkshopsByCategory, createWorkshop, updateWorkshop, deleteWorkshop,
     getTeam, createMember, updateMember, deleteMember,
     getSettings, updateSetting,
     getCloudinaryImages, deleteCloudinaryImage,
-    getGuests, createGuest, updateGuest, deleteGuest
+    getGuests, createGuest, updateGuest, deleteGuest,
+    getNetworkImages, createNetworkImage, updateNetworkImage, deleteNetworkImage
 } from '../apiClient';
 
 import '../styles/Admin.css';
@@ -129,7 +130,7 @@ const Admin = () => {
 
     // --- HELPERS ---
     const getThumbnailFallback = (item) => {
-        if (activeTab === 'guests') return item.image_url || null;
+        if (activeTab === 'guests' || activeTab === 'network') return item.image_url || null;
         if (item.image_url || item.thumbnail_url) return item.image_url || item.thumbnail_url;
         if (activeTab === 'youtube_videos') {
             if (item.episode_id === 'EP.01') return yt1;
@@ -146,12 +147,12 @@ const Admin = () => {
             if (item.display_id === '06') return act11;
             return act1;
         }
-        if (activeTab === 'workshops') {
+        if (activeTab === 'workshops' || activeTab === 'webinars') {
             if (item.title === 'Diplomatic Frameworks') return ws1;
             if (item.title === 'Media Narratives in IR') return ws2;
             if (item.title === 'Policy in Practice') return ws3;
             if (item.title === 'Bharat Manthan 2025') return ws4;
-            return ws1; 
+            return item.image_url || ws1;
         }
         // if (activeTab === 'team') {
         //     if (item.name === "Pruthaviraj Singh") return prithviraajImg;
@@ -187,12 +188,15 @@ const Admin = () => {
         articles: getArticle,
         youtube_videos: getYoutubeVideos,
         workshops: getWorkshops,
+        webinars: () => getWorkshopsByCategory('WEBINAR'),
         team: getTeam,
         guests: getGuests,
+        network: getNetworkImages,
     };
 
     const fetchData = async () => {
         setLoading(true);
+        setItems([]);
         try {
             const sData = await getSettings();
             if (sData && !sData.error) {
@@ -268,18 +272,24 @@ const Admin = () => {
             const img = new Image();
             img.src = URL.createObjectURL(file);
             img.onload = () => {
+                if (activeTab === 'network') {
+                    setFormData({ ...formData, imageFile: file });
+                    setPreviewUrl(img.src);
+                    return;
+                }
+
                 let expectedRatio, ratioLabel;
 
                 if (activeTab === 'articles' || activeTab === 'team' || activeTab === 'guests') {
                     expectedRatio = 4 / 5;
                     ratioLabel = '4:5';
                 } else {
-                    expectedRatio = 3 / 2; 
+                    expectedRatio = 3 / 2;
                     ratioLabel = '3:2';
                 }
 
                 const actualRatio = img.width / img.height;
-                const tolerance = 0.02; 
+                const tolerance = 0.02;
                 const ratioMatch = Math.abs(actualRatio - expectedRatio) < tolerance;
 
                 if (!ratioMatch) {
@@ -352,9 +362,10 @@ const Admin = () => {
 
             if (activeTab === 'events' && !dataToSave.status) dataToSave.status = 'REGISTRATION OPEN';
             if (activeTab === 'workshops' && !dataToSave.category) dataToSave.category = 'WEBINAR';
+            if (activeTab === 'webinars') dataToSave.category = 'WEBINAR';
 
-            const updateFnMap = { events: updateEvent, articles: updateArticle, youtube_videos: updateYoutubeVideo, workshops: updateWorkshop, team: updateMember, guests: updateGuest };
-            const createFnMap = { events: createEvent, articles: createArticle, youtube_videos: createYoutubeVideo, workshops: createWorkshop, team: createMember, guests: createGuest };
+            const updateFnMap = { events: updateEvent, articles: updateArticle, youtube_videos: updateYoutubeVideo, workshops: updateWorkshop, webinars: updateWorkshop, team: updateMember, guests: updateGuest, network: updateNetworkImage };
+            const createFnMap = { events: createEvent, articles: createArticle, youtube_videos: createYoutubeVideo, workshops: createWorkshop, webinars: createWorkshop, team: createMember, guests: createGuest, network: createNetworkImage };
 
             if (editingId) {
                 const res = await updateFnMap[activeTab](editingId, dataToSave);
@@ -429,7 +440,7 @@ const Admin = () => {
         const item = items.find(i => i.id === id);
         const imageUrl = item?.image_url || item?.thumbnail_url;
 
-        const deleteFnMap = { events: deleteEvent, articles: deleteArticle, youtube_videos: deleteYoutubeVideo, workshops: deleteWorkshop, team: deleteMember, guests: deleteGuest };
+        const deleteFnMap = { events: deleteEvent, articles: deleteArticle, youtube_videos: deleteYoutubeVideo, workshops: deleteWorkshop, webinars: deleteWorkshop, team: deleteMember, guests: deleteGuest, network: deleteNetworkImage };
         const res = await deleteFnMap[activeTab](id);
         if (res?.error) showNotice('Error deleting: ' + res.error, 'error');
         else {
@@ -661,6 +672,58 @@ const Admin = () => {
                     </div>
                 </div>
             );
+        } else if (activeTab === 'network') {
+            return (
+                <div className="form-grid">
+                    <div className="input-group">
+                        <label>Caption <span style={{ color: '#888', fontWeight: 400, fontSize: '11px' }}>(optional)</span></label>
+                        <input type="text" name="caption" value={formData.caption || ''} onChange={handleInputChange} placeholder="e.g. India AI Impact Summit 2024" />
+                    </div>
+                    <div className="input-group">
+                        <label style={{ color: 'var(--accent-orange)' }}>IMAGE — ANY ASPECT RATIO</label>
+                        <div className="upload-container">
+                            {(previewUrl || formData.image_url) && (
+                                <div className="image-preview" style={{ width: '240px', aspectRatio: '1/1', marginBottom: '15px' }}>
+                                    <img src={previewUrl || formData.image_url} alt="prev" style={{ objectFit: 'cover', width: '100%', height: '100%', borderRadius: '8px' }} />
+                                </div>
+                            )}
+                            <button type="button" onClick={openCloudinaryPicker} style={{ width: '100%', padding: '12px', background: '#111', color: '#fff', border: '1px solid #333', fontFamily: 'inherit', fontWeight: '700', letterSpacing: '1px', fontSize: '11px', cursor: 'pointer', marginBottom: '8px' }}>
+                                📂 BROWSE CLOUDINARY LIBRARY
+                            </button>
+                            <div style={{ textAlign: 'center', color: '#555', fontSize: '10px', fontWeight: '800', margin: '6px 0', letterSpacing: '2px' }}>— OR UPLOAD NEW —</div>
+                            <input type="file" accept="image/*" onChange={handleFileChange} />
+                        </div>
+                    </div>
+                </div>
+            );
+        } else if (activeTab === 'webinars') {
+            return (
+                <div className="form-grid">
+                    <div className="input-group"><label>Webinar / Programme Title</label><input type="text" name="title" value={formData.title || ''} onChange={handleInputChange} required /></div>
+                    <div className="input-group"><label>Date (e.g. MAY 2025)</label><input type="text" name="date" value={formData.date || ''} onChange={handleInputChange} /></div>
+                    <div className="input-group">
+                        <label>Register Link <span style={{ color: '#888', fontWeight: 400, fontSize: '11px' }}>(paste your registration URL)</span></label>
+                        <input type="url" name="register_link" value={formData.register_link || ''} onChange={handleInputChange} placeholder="https://forms.google.com/..." />
+                        <p className="upload-hint" style={{ marginTop: '6px' }}>⚠️ Requires <code>register_link</code> column in the Supabase <code>workshops</code> table. Run: <code>ALTER TABLE workshops ADD COLUMN register_link TEXT;</code></p>
+                    </div>
+                    <div className="input-group">
+                        <label style={{ color: 'var(--accent-orange)' }}>THUMBNAIL — 3:2 ASPECT RATIO</label>
+                        <div className="upload-container">
+                            {(previewUrl || formData.image_url) && (
+                                <div className="image-preview" style={{ width: '300px', aspectRatio: '3/2', marginBottom: '15px' }}>
+                                    <img src={previewUrl || formData.image_url} alt="prev" style={{ objectFit: 'contain' }} />
+                                </div>
+                            )}
+                            <button type="button" onClick={openCloudinaryPicker} style={{ width: '100%', padding: '12px', background: '#111', color: '#fff', border: '1px solid #333', fontFamily: 'inherit', fontWeight: '700', letterSpacing: '1px', fontSize: '11px', cursor: 'pointer', marginBottom: '8px' }}>
+                                📂 BROWSE CLOUDINARY LIBRARY
+                            </button>
+                            <div style={{ textAlign: 'center', color: '#555', fontSize: '10px', fontWeight: '800', margin: '6px 0', letterSpacing: '2px' }}>— OR UPLOAD NEW —</div>
+                            <input type="file" accept="image/*" onChange={handleFileChange} />
+                            <p className="upload-hint">Please maintain 3:2 aspect ratio for best display.</p>
+                        </div>
+                    </div>
+                </div>
+            );
         } else {
             return (
                 <div className="form-grid">
@@ -814,6 +877,12 @@ const Admin = () => {
                     </button>
                     <button className={activeTab === 'guests' ? 'nav-item active' : 'nav-item'} onClick={() => setActiveTab('guests')}>
                         <span>🎙️</span> {!isCollapsed && "GUESTS"}
+                    </button>
+                    <button className={activeTab === 'webinars' ? 'nav-item active' : 'nav-item'} onClick={() => setActiveTab('webinars')}>
+                        <span>🎓</span> {!isCollapsed && "WEBINARS"}
+                    </button>
+                    <button className={activeTab === 'network' ? 'nav-item active' : 'nav-item'} onClick={() => setActiveTab('network')}>
+                        <span>🌐</span> {!isCollapsed && "OUR NETWORK"}
                     </button>
                 </nav>
             </aside>

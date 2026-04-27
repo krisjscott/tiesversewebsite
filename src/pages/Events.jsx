@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo, useCallback, memo } from 'react';
-import { getEvents, getYoutubeVideos, getWorkshops, getSettings, getGuests } from '../apiClient';
+import { useNavigate } from 'react-router-dom';
+import { getEvents, getYoutubeVideos, getWorkshops, getSettings, getGuests, getNetworkImages } from '../apiClient';
 import '../styles/Events.css';
 
 // Asset imports (DON'T TOUCH)
@@ -249,6 +250,7 @@ const STATIC_CSS = `
     aspect-ratio: 3/4; background: rgba(0,0,0,0.25);
     border: 2px solid rgba(255,255,255,0.15);
     transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
   }
   .guest-tile:hover {
     transform: scale(1.04) translateY(-3px);
@@ -263,6 +265,12 @@ const STATIC_CSS = `
   }
   .guest-tile-name { font-size: 11px; font-weight: 800; color: #fff; letter-spacing: 0.3px; line-height: 1.2; }
   .guest-tile-role { font-size: 9px; color: rgba(255,255,255,0.65); margin-top: 3px; letter-spacing: 0.5px; }
+  .guest-tile-desc {
+    font-size: 9px; color: rgba(255,255,255,0.5); margin-top: 5px; letter-spacing: 0.2px; line-height: 1.45;
+    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+    opacity: 0; transition: opacity 0.3s ease;
+  }
+  .guest-tile:hover .guest-tile-desc { opacity: 1; }
 
   /* ── WEBINAR MOSAIC ── */
   .webinar-mosaic {
@@ -273,7 +281,7 @@ const STATIC_CSS = `
     aspect-ratio: 16/9; background: rgba(0,0,0,0.25);
     border: 2px solid rgba(255,255,255,0.15);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
-    cursor: default;
+    cursor: pointer;
   }
   .webinar-tile:hover { transform: scale(1.03); box-shadow: 0 10px 24px rgba(0,0,0,0.4); }
   .webinar-tile img { width: 100%; height: 100%; object-fit: cover; }
@@ -293,6 +301,49 @@ const STATIC_CSS = `
     background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
     padding: 18px 10px 8px; font-size: 10px; font-weight: 700;
     color: #fff; z-index: 3; letter-spacing: 0.5px; line-height: 1.3;
+  }
+
+  /* ── NETWORK IMAGE STRIP ── */
+  .network-strip-wrap {
+    margin-top: 28px;
+    position: relative;
+  }
+  .network-strip-label {
+    font-size: 10px; font-weight: 800; letter-spacing: 3px;
+    color: var(--accent); text-transform: uppercase; margin-bottom: 14px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .network-strip-label::before { content: ''; width: 16px; height: 2px; background: var(--accent); flex-shrink: 0; }
+  .network-strip {
+    display: flex;
+    gap: 12px;
+    overflow-x: auto;
+    padding-bottom: 10px;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    cursor: grab;
+  }
+  .network-strip:active { cursor: grabbing; }
+  .network-strip::-webkit-scrollbar { height: 3px; }
+  .network-strip::-webkit-scrollbar-track { background: rgba(255,255,255,0.04); border-radius: 2px; }
+  .network-strip::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 2px; }
+  .network-img-tile {
+    flex-shrink: 0;
+    width: 200px;
+    aspect-ratio: 1/1;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,0.1);
+    background: rgba(0,0,0,0.3);
+    transition: border-color 0.3s ease, transform 0.3s ease;
+  }
+  .network-img-tile:hover { border-color: rgba(255,255,255,0.4); transform: scale(1.03); }
+  .network-img-tile img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .network-img-caption {
+    font-size: 9px; font-weight: 700; letter-spacing: 0.5px;
+    color: rgba(255,255,255,0.5); margin-top: 6px; text-align: center;
+    text-transform: uppercase; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    width: 200px;
   }
 
   /* Empty placeholder tiles */
@@ -441,6 +492,7 @@ function useThrottledResize(callback, delay = 200) {
 // MAIN COMPONENT
 // ============================================================
 const Events = () => {
+    const navigate = useNavigate();
     const [expandedDescriptions, setExpandedDescriptions] = useState({});
     const [loading, setLoading] = useState(true);
     const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
@@ -448,7 +500,8 @@ const Events = () => {
         events: [],
         podcasts: [],
         guests: [],
-        webinars: []
+        webinars: [],
+        networkImages: []
     });
     const [displayLimits, setDisplayLimits] = useState({
         pc: 2, mobile: 1, pcYT: 3, mobileYT: 2
@@ -480,12 +533,13 @@ const Events = () => {
         const fetchAllData = async () => {
             setLoading(true);
             try {
-                const [settingsRes, eventsRes, youtubeRes, workshopsRes, guestsRes] = await Promise.all([
+                const [settingsRes, eventsRes, youtubeRes, workshopsRes, guestsRes, networkRes] = await Promise.all([
                     getSettings(),
                     getEvents(),
                     getYoutubeVideos(),
                     getWorkshops(),
-                    getGuests()
+                    getGuests(),
+                    getNetworkImages()
                 ]);
 
                 if (settingsRes && !settingsRes.error) {
@@ -502,7 +556,8 @@ const Events = () => {
                     events: (eventsRes || []).map(e => ({ ...e, img: getFallback(e, 'event') })),
                     podcasts: (youtubeRes || []).map(p => ({ ...p, img: getFallback(p, 'podcast'), tag: p.category || 'STRATEGY' })),
                     guests: (guestsRes && !guestsRes.error) ? guestsRes : [],
-                    webinars: (workshopsRes || []).filter(w => w.category === 'WEBINAR').map(w => ({ ...w, img: getFallback(w, 'workshop') }))
+                    webinars: (workshopsRes || []).filter(w => w.category === 'WEBINAR').map(w => ({ ...w, img: getFallback(w, 'workshop') })),
+                    networkImages: (networkRes && !networkRes.error) ? networkRes : []
                 });
 
             } catch (err) {
@@ -602,11 +657,12 @@ const Events = () => {
                                     {data.guests.length > 0 ? (
                                         <div className="guest-mosaic">
                                             {data.guests.slice(0, 6).map((g) => (
-                                                <div key={g.id} className="guest-tile">
+                                                <div key={g.id} className="guest-tile" onClick={() => navigate('/past-guests')}>
                                                     <img src={g.image_url} alt={g.name} loading="lazy" />
                                                     <div className="guest-tile-overlay">
                                                         <div className="guest-tile-name">{g.name}</div>
                                                         {g.role && <div className="guest-tile-role">{g.role}</div>}
+                                                        {g.description && <div className="guest-tile-desc">{g.description}</div>}
                                                     </div>
                                                 </div>
                                             ))}
@@ -646,7 +702,7 @@ const Events = () => {
                                     {data.webinars.length > 0 ? (
                                         <div className="webinar-mosaic">
                                             {data.webinars.slice(0, 4).map((w) => (
-                                                <div key={w.id} className="webinar-tile">
+                                                <div key={w.id} className="webinar-tile" onClick={() => navigate('/webinars')}>
                                                     <img src={w.img} alt={w.title} loading="lazy" />
                                                     <div className="webinar-play">
                                                         <div className="webinar-play-circle">
@@ -672,6 +728,40 @@ const Events = () => {
                         </div>
 
                     </div>
+
+                    {/* — NETWORK IMAGE STRIP — */}
+                    {data.networkImages.length > 0 && (
+                        <div className="network-strip-wrap">
+                            <div className="network-strip-label">OUR NETWORK // IMAGES</div>
+                            <div
+                                className="network-strip"
+                                onMouseDown={(e) => {
+                                    const el = e.currentTarget;
+                                    el.dataset.dragging = 'true';
+                                    el.dataset.startX = e.pageX - el.offsetLeft;
+                                    el.dataset.scrollLeft = el.scrollLeft;
+                                }}
+                                onMouseMove={(e) => {
+                                    const el = e.currentTarget;
+                                    if (el.dataset.dragging !== 'true') return;
+                                    e.preventDefault();
+                                    const x = e.pageX - el.offsetLeft;
+                                    el.scrollLeft = el.dataset.scrollLeft - (x - el.dataset.startX);
+                                }}
+                                onMouseUp={(e) => { e.currentTarget.dataset.dragging = 'false'; }}
+                                onMouseLeave={(e) => { e.currentTarget.dataset.dragging = 'false'; }}
+                            >
+                                {data.networkImages.map((img) => (
+                                    <div key={img.id}>
+                                        <div className="network-img-tile">
+                                            <img src={img.image_url} alt={img.caption || 'Network'} loading="lazy" draggable="false" />
+                                        </div>
+                                        {img.caption && <div className="network-img-caption">{img.caption}</div>}
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    )}
                 </div>
 
                 {/* 02. PODCASTS */}

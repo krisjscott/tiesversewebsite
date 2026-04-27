@@ -18,6 +18,8 @@ import Login from './pages/Login';
 import ProtectedRoute from './components/ProtectedRoute';
 import AnnouncementBanner from './components/AnnouncementBanner';
 import Contact from './pages/Contact';
+import PastGuests from './pages/PastGuests';
+import WebinarsPage from './pages/WebinarsPage';
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
@@ -112,6 +114,8 @@ function App() {
               <Route path="/team" element={<Team />} />
               <Route path="/login" element={<Login />} />
               <Route path="/contact" element={<Contact />} />
+              <Route path="/past-guests" element={<PastGuests />} />
+              <Route path="/webinars" element={<WebinarsPage />} />
               <Route path="/admin" element={
                 <ProtectedRoute>
                   <Admin />
