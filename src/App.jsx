@@ -21,7 +21,7 @@ import AnnouncementBanner from './components/AnnouncementBanner';
 import Contact from './pages/Contact';
 import PastGuests from './pages/PastGuests';
 import WebinarsPage from './pages/WebinarsPage';
-import Research from './pages/Research';
+// import Research from './pages/Research';
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
