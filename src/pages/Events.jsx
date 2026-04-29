@@ -636,7 +636,7 @@ const Events = () => {
                 <div className="section-block">
                     <header className="block-header">
                         <span className="block-label">01 // FEATURED ENGAGEMENTS</span>
-                        <h2 className="block-title">OUR NETWORK</h2>
+                        {/* <h2 className="block-title">OUR NETWORK</h2> */}
                     </header>
 
                     {/* — NETWORK IMAGE STRIP — */}
