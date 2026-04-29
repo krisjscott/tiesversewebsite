@@ -926,7 +926,7 @@ const Admin = () => {
             <main className="admin-main">
                 <header className="main-topbar" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <div>
-                        <h1>{activeTab.toUpperCase()} MANAGEMENT</h1>
+                        <h1>{activeTab === 'events' ? 'UPCOMING EVENTS' : `${activeTab.toUpperCase()} MANAGEMENT`}</h1>
                         <p>Total items: {items.length}</p>
                     </div>
                     <div style={{ display: 'flex', gap: '15px' }}>
