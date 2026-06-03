@@ -1,56 +1,1136 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Tiesverse Foundation - India's Leading Youth-Led Think Tank" />
-    <meta name="theme-color" content="#0A0A0A" />
-    <title>Tiesverse Foundation</title>
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Tiesverse — India's Leading Youth Platform</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;background:#fff;color:#1a1a2e;overflow-x:hidden}
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+/* ── VARIABLES ── */
+:root{
+  --orange:#F97316;
+  --orange-dark:#ea6b0e;
+  --orange-light:#FFF7ED;
+  --orange-bg:#FEF3E8;
+  --text:#1a1a2e;
+  --muted:#6B7280;
+  --border:#E5E7EB;
+  --card-bg:#FAFAFA;
+  --white:#fff;
+}
 
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Oswald:wght@400;500;600;700&display=swap" rel="stylesheet">
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar{width:5px}
+::-webkit-scrollbar-track{background:#f1f1f1}
+::-webkit-scrollbar-thumb{background:var(--orange);border-radius:10px}
 
-    <style>
-      /* 1. Global Reset to hide default mouse on Desktop */
-      @media (min-width: 769px) {
-        * {
-          cursor: none !important;
-        }
+/* ── NAV ── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:1000;
+  background:rgba(255,255,255,0.95);
+  backdrop-filter:blur(12px);
+  border-bottom:1px solid transparent;
+  transition:all .3s ease;
+  padding:0 60px;
+  height:76px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+nav.scrolled{border-bottom-color:var(--border);box-shadow:0 2px 20px rgba(0,0,0,0.06)}
+.logo-wrap{display:flex;align-items:center;gap:10px;text-decoration:none}
+.logo-icon{
+  width:44px;height:44px;border-radius:10px;
+  background:var(--orange);
+  display:flex;align-items:center;justify-content:center;
+  font-size:20px;font-weight:800;color:#fff;
+}
+.logo-text{font-size:18px;font-weight:700;color:var(--text)}
+.nav-links{display:flex;gap:36px;list-style:none}
+.nav-links a{font-size:15px;font-weight:500;color:var(--text);text-decoration:none;transition:color .2s;position:relative}
+.nav-links a::after{content:'';position:absolute;bottom:-4px;left:0;width:0;height:2px;background:var(--orange);transition:width .3s}
+.nav-links a:hover{color:var(--orange)}
+.nav-links a:hover::after{width:100%}
+.nav-right{display:flex;align-items:center;gap:16px}
+.theme-btn{
+  width:40px;height:40px;border-radius:50%;
+  border:1px solid var(--border);background:var(--white);
+  cursor:pointer;font-size:18px;
+  display:flex;align-items:center;justify-content:center;
+  transition:all .3s;
+}
+.theme-btn:hover{background:var(--orange-light);border-color:var(--orange)}
+.join-btn{
+  background:var(--orange);color:#fff;
+  border:none;border-radius:10px;
+  padding:12px 24px;font-size:14px;font-weight:600;
+  cursor:pointer;transition:all .3s;
+  font-family:'Inter',sans-serif;
+}
+.join-btn:hover{background:var(--orange-dark);transform:translateY(-2px);box-shadow:0 6px 20px rgba(249,115,22,0.35)}
 
-        /* Ensure interactive elements don't trigger the default 'pointer' hand */
-        a, button, input, textarea, [role="button"], .team-card-wrapper {
-          cursor: none !important;
-        }
-      }
+/* ── HERO ── */
+.hero{
+  min-height:100vh;
+  background:var(--orange-bg);
+  display:flex;align-items:center;
+  padding:100px 60px 60px;
+  position:relative;overflow:hidden;
+}
+.hero::before{
+  content:'';position:absolute;
+  width:700px;height:700px;border-radius:50%;
+  background:rgba(249,115,22,0.08);
+  right:-100px;top:50%;transform:translateY(-50%);
+  animation:heroPulse 6s ease-in-out infinite;
+}
+@keyframes heroPulse{0%,100%{transform:translateY(-50%) scale(1)}50%{transform:translateY(-50%) scale(1.05)}}
 
-      /* 2. Standard behaviors for Mobile (Touchscreens) */
-      @media (max-width: 768px) {
-        * {
-          cursor: auto !important;
-        }
-        a, button {
-          cursor: pointer !important;
-        }
-      }
+.hero-left{flex:1;max-width:600px;z-index:2}
+.hero-badge{
+  display:inline-flex;align-items:center;gap:8px;
+  background:#fff;border:1px solid var(--border);
+  border-radius:100px;padding:8px 16px;
+  font-size:13px;font-weight:500;color:var(--text);
+  margin-bottom:28px;
+  opacity:0;transform:translateY(20px);
+  animation:fadeUp .7s .1s forwards;
+}
+.badge-dot{width:8px;height:8px;background:var(--orange);border-radius:50%;animation:blink 1.5s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
+.hero h1{
+  font-size:clamp(48px,6vw,80px);
+  font-weight:900;
+  line-height:1.05;
+  letter-spacing:-1px;
+  margin-bottom:20px;
+  opacity:0;transform:translateY(30px);
+  animation:fadeUp .8s .25s forwards;
+}
+.hero h1 .orange{color:var(--orange)}
+.hero-sub{
+  font-size:17px;color:var(--muted);line-height:1.7;
+  max-width:480px;margin-bottom:36px;
+  opacity:0;transform:translateY(20px);
+  animation:fadeUp .7s .4s forwards;
+}
+.hero-btns{
+  display:flex;gap:14px;flex-wrap:wrap;
+  opacity:0;transform:translateY(20px);
+  animation:fadeUp .7s .55s forwards;
+}
+.btn-primary{
+  background:var(--orange);color:#fff;
+  border:none;border-radius:10px;
+  padding:14px 28px;font-size:15px;font-weight:600;
+  cursor:pointer;font-family:'Inter',sans-serif;
+  display:flex;align-items:center;gap:8px;
+  transition:all .3s;
+}
+.btn-primary:hover{background:var(--orange-dark);transform:translateY(-3px);box-shadow:0 10px 30px rgba(249,115,22,0.35)}
+.btn-secondary{
+  background:#fff;color:var(--text);
+  border:1.5px solid var(--border);border-radius:10px;
+  padding:14px 28px;font-size:15px;font-weight:500;
+  cursor:pointer;font-family:'Inter',sans-serif;
+  display:flex;align-items:center;gap:8px;
+  transition:all .3s;
+}
+.btn-secondary:hover{border-color:var(--orange);color:var(--orange);transform:translateY(-3px)}
 
-      /* 3. Smooth Body Background to prevent white flashes during load */
-      body {
-        margin: 0;
-        background-color: #050505;
-        overflow-x: hidden;
-      }
+/* Hero right visual */
+.hero-right{
+  flex:1;position:relative;height:500px;
+  display:flex;align-items:center;justify-content:center;
+  opacity:0;animation:fadeIn 1s .7s forwards;
+}
+@keyframes fadeIn{to{opacity:1}}
+.hero-circle{
+  width:420px;height:420px;border-radius:50%;
+  background:rgba(249,115,22,0.15);
+  position:relative;display:flex;align-items:center;justify-content:center;
+  animation:rotate 20s linear infinite;
+}
+.hero-rocket-wrap{
+  width:110px;height:110px;border-radius:50%;
+  background:var(--orange);
+  display:flex;align-items:center;justify-content:center;
+  font-size:52px;
+  animation:counterRotate 20s linear infinite;
+  box-shadow:0 8px 30px rgba(249,115,22,0.4);
+}
+@keyframes rotate{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+@keyframes counterRotate{from{transform:rotate(0deg)}to{transform:rotate(-360deg)}}
+.hero-float-card{
+  position:absolute;
+  background:#fff;border-radius:14px;
+  padding:14px 18px;
+  box-shadow:0 8px 30px rgba(0,0,0,0.1);
+  display:flex;align-items:center;gap:12px;
+  white-space:nowrap;
+  animation:floatCard 3s ease-in-out infinite;
+}
+.hero-float-card:nth-child(3){top:30px;right:-20px;animation-delay:0s}
+.hero-float-card:nth-child(4){bottom:60px;left:-30px;animation-delay:1.5s}
+@keyframes floatCard{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+.float-icon{
+  width:44px;height:44px;border-radius:10px;
+  background:var(--orange-light);
+  display:flex;align-items:center;justify-content:center;font-size:22px;
+}
+.float-title{font-size:14px;font-weight:700}
+.float-sub{font-size:12px;color:var(--muted)}
 
-      #root {
-        min-height: 100vh;
-      }
-    </style>
-  </head>
-  <body>
-    <div id="root"></div>
+/* ── STATS STRIP ── */
+.stats-strip{
+  background:var(--orange-bg);
+  padding:20px 60px 60px;
+  display:flex;gap:48px;
+}
+.stat-item{opacity:0;transform:translateY(20px);transition:all .6s}
+.stat-item.visible{opacity:1;transform:translateY(0)}
+.stat-num{font-size:38px;font-weight:900;color:var(--orange);line-height:1}
+.stat-label{font-size:13px;color:var(--muted);margin-top:4px}
 
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
+/* ── SECTION BASE ── */
+section{padding:90px 60px}
+.section-center{text-align:center;margin-bottom:60px}
+.section-center h2{font-size:clamp(28px,4vw,42px);font-weight:800;letter-spacing:-.5px;margin-bottom:14px}
+.section-center p{font-size:16px;color:var(--muted);max-width:520px;margin:0 auto}
+
+/* ── REVEAL ANIMATION ── */
+.reveal{opacity:0;transform:translateY(40px);transition:opacity .7s,transform .7s}
+.reveal.visible{opacity:1;transform:translateY(0)}
+.reveal-left{opacity:0;transform:translateX(-40px);transition:opacity .7s,transform .7s}
+.reveal-left.visible{opacity:1;transform:translateX(0)}
+.reveal-right{opacity:0;transform:translateX(40px);transition:opacity .7s,transform .7s}
+.reveal-right.visible{opacity:1;transform:translateX(0)}
+
+/* ── WHAT WE OFFER ── */
+.offer-section{background:#fff}
+.offer-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:24px;
+}
+.offer-card{
+  border:1px solid var(--border);border-radius:16px;
+  padding:36px 30px;
+  transition:all .3s;cursor:default;
+  position:relative;overflow:hidden;
+}
+.offer-card::after{
+  content:'';position:absolute;bottom:0;left:0;right:0;height:3px;
+  background:var(--orange);transform:scaleX(0);transform-origin:left;
+  transition:transform .4s cubic-bezier(0.23,1,0.32,1);
+}
+.offer-card:hover{transform:translateY(-6px);box-shadow:0 12px 40px rgba(0,0,0,0.08);border-color:transparent}
+.offer-card:hover::after{transform:scaleX(1)}
+.offer-icon{
+  width:56px;height:56px;border-radius:12px;
+  background:var(--orange-light);
+  display:flex;align-items:center;justify-content:center;
+  font-size:26px;margin-bottom:20px;
+  transition:transform .3s;
+}
+.offer-card:hover .offer-icon{transform:scale(1.1) rotate(-5deg)}
+.offer-card h3{font-size:18px;font-weight:700;margin-bottom:10px}
+.offer-card p{font-size:14px;color:var(--muted);line-height:1.65}
+
+/* ── IMPACT ── */
+.impact-section{background:var(--orange-bg)}
+.impact-grid{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:20px;
+}
+.impact-card{
+  background:#fff;border-radius:16px;
+  padding:36px 28px;text-align:center;
+  border:1px solid rgba(249,115,22,0.1);
+  transition:all .3s;
+}
+.impact-card:hover{transform:translateY(-6px);box-shadow:0 12px 40px rgba(249,115,22,0.15)}
+.impact-icon{
+  width:60px;height:60px;border-radius:50%;
+  background:var(--orange-light);
+  display:flex;align-items:center;justify-content:center;
+  font-size:28px;margin:0 auto 20px;
+}
+.impact-num{font-size:36px;font-weight:900;color:var(--orange);margin-bottom:8px}
+.impact-label{font-size:14px;color:var(--muted)}
+
+/* ── WEBINARS ── */
+.webinars-section{background:#fff}
+.webinar-list{display:flex;flex-direction:column;gap:16px;max-width:900px;margin:0 auto}
+.webinar-card{
+  background:#fff;border:1px solid var(--border);border-radius:16px;
+  padding:28px 32px;
+  display:flex;align-items:center;justify-content:space-between;gap:24px;
+  border-left:4px solid var(--orange);
+  transition:all .3s;position:relative;overflow:hidden;
+}
+.webinar-card::before{
+  content:'';position:absolute;inset:0;
+  background:var(--orange-light);opacity:0;transition:opacity .3s;
+}
+.webinar-card:hover{transform:translateX(6px);box-shadow:0 6px 30px rgba(249,115,22,0.12)}
+.webinar-card:hover::before{opacity:1}
+.webinar-info{position:relative;z-index:1}
+.webinar-title{font-size:18px;font-weight:700;margin-bottom:10px}
+.webinar-meta{display:flex;flex-wrap:wrap;gap:14px;font-size:13px;color:var(--muted);align-items:center}
+.webinar-meta span{display:flex;align-items:center;gap:5px}
+.webinar-meta .reg-count{color:var(--orange);font-weight:600}
+.webinar-register{
+  background:var(--orange);color:#fff;
+  border:none;border-radius:10px;
+  padding:12px 22px;font-size:14px;font-weight:600;
+  cursor:pointer;font-family:'Inter',sans-serif;
+  display:flex;align-items:center;gap:6px;white-space:nowrap;
+  transition:all .3s;position:relative;z-index:1;
+  flex-shrink:0;
+}
+.webinar-register:hover{background:var(--orange-dark);transform:scale(1.05)}
+.view-all-wrap{text-align:center;margin-top:36px}
+.view-all-btn{
+  background:transparent;color:var(--orange);
+  border:1.5px solid var(--orange);border-radius:10px;
+  padding:13px 32px;font-size:14px;font-weight:600;
+  cursor:pointer;font-family:'Inter',sans-serif;
+  transition:all .3s;
+}
+.view-all-btn:hover{background:var(--orange);color:#fff}
+
+/* ── TESTIMONIALS ── */
+.testi-section{background:var(--orange-bg)}
+.testi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.testi-card{
+  background:#fff;border:1px solid var(--border);border-radius:16px;
+  padding:28px;transition:all .3s;position:relative;overflow:hidden;
+}
+.testi-card:hover{transform:translateY(-6px);box-shadow:0 12px 40px rgba(0,0,0,0.08)}
+.testi-quote-icon{
+  position:absolute;top:20px;right:20px;
+  font-size:36px;color:rgba(249,115,22,0.15);
+  font-family:serif;font-weight:900;line-height:1;
+}
+.testi-author{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+.testi-avatar{
+  width:52px;height:52px;border-radius:50%;
+  background:var(--orange-light);
+  display:flex;align-items:center;justify-content:center;font-size:26px;
+}
+.testi-name{font-size:14px;font-weight:700}
+.testi-role{font-size:12px;color:var(--muted)}
+.testi-school{font-size:12px;color:var(--orange);font-weight:600}
+.stars{color:var(--orange);font-size:16px;margin-bottom:12px;letter-spacing:2px}
+.testi-text{font-size:14px;color:var(--muted);line-height:1.7}
+
+/* ── TEAM ── */
+.team-section{background:#fff}
+.team-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+.team-card{
+  border:1px solid var(--border);border-radius:16px;
+  padding:32px 24px;text-align:center;
+  transition:all .3s;
+}
+.team-card:hover{transform:translateY(-6px);box-shadow:0 12px 40px rgba(0,0,0,0.08);border-color:var(--orange)}
+.team-card.featured{border-color:var(--orange);border-width:2px}
+.team-avatar-wrap{position:relative;display:inline-block;margin-bottom:20px}
+.team-avatar{
+  width:80px;height:80px;border-radius:50%;
+  background:var(--orange-light);
+  display:flex;align-items:center;justify-content:center;font-size:38px;
+}
+.team-card.featured .team-avatar-wrap::after{
+  content:'';position:absolute;inset:-4px;
+  border:2px solid var(--orange);border-radius:50%;
+}
+.team-name{font-size:16px;font-weight:700;margin-bottom:4px}
+.team-role{font-size:13px;color:var(--orange);font-weight:600;margin-bottom:8px}
+.team-bio{font-size:13px;color:var(--muted);margin-bottom:16px}
+.team-socials{display:flex;gap:10px;justify-content:center}
+.social-btn{
+  width:32px;height:32px;border-radius:8px;
+  border:1px solid var(--border);background:#fff;
+  display:flex;align-items:center;justify-content:center;
+  font-size:14px;cursor:pointer;transition:all .3s;text-decoration:none;
+}
+.social-btn:hover{background:var(--orange);border-color:var(--orange);transform:translateY(-3px)}
+
+/* ── FAQ ── */
+.faq-section{background:var(--orange-bg)}
+.faq-list{max-width:760px;margin:0 auto;display:flex;flex-direction:column;gap:12px}
+.faq-item{
+  background:#fff;border:1px solid var(--border);border-radius:12px;overflow:hidden;
+  transition:all .3s;
+}
+.faq-item.open{border-color:var(--orange)}
+.faq-question{
+  width:100%;background:none;border:none;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:20px 24px;font-size:15px;font-weight:600;
+  cursor:pointer;font-family:'Inter',sans-serif;text-align:left;
+  color:var(--text);transition:color .2s;
+}
+.faq-question:hover{color:var(--orange)}
+.faq-icon{
+  width:28px;height:28px;border-radius:6px;
+  border:1.5px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  font-size:18px;color:var(--orange);flex-shrink:0;
+  transition:all .3s;font-weight:300;
+}
+.faq-item.open .faq-icon{background:var(--orange);color:#fff;border-color:var(--orange);transform:rotate(45deg)}
+.faq-answer{
+  max-height:0;overflow:hidden;
+  transition:max-height .4s cubic-bezier(0.23,1,0.32,1),padding .3s;
+  font-size:14px;color:var(--muted);line-height:1.7;
+  padding:0 24px;
+}
+.faq-item.open .faq-answer{max-height:200px;padding:0 24px 20px}
+
+/* ── CTA SECTION ── */
+.cta-section{
+  background:var(--orange);
+  padding:80px 60px;text-align:center;
+  position:relative;overflow:hidden;
+}
+.cta-section::before{
+  content:'✦';position:absolute;top:30px;left:50%;transform:translateX(-50%);
+  font-size:32px;color:rgba(255,255,255,0.6);
+  animation:spin 8s linear infinite;
+}
+@keyframes spin{to{transform:translateX(-50%) rotate(360deg)}}
+.cta-section h2{
+  font-size:clamp(28px,4vw,48px);font-weight:900;
+  color:#fff;margin-bottom:16px;margin-top:20px;
+}
+.cta-section p{font-size:17px;color:rgba(255,255,255,0.85);margin-bottom:40px;max-width:540px;margin-left:auto;margin-right:auto}
+.cta-btns{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin-bottom:32px}
+.cta-btn-white{
+  background:#fff;color:var(--orange);
+  border:none;border-radius:10px;
+  padding:15px 30px;font-size:15px;font-weight:700;
+  cursor:pointer;font-family:'Inter',sans-serif;
+  display:flex;align-items:center;gap:8px;
+  transition:all .3s;
+}
+.cta-btn-white:hover{transform:translateY(-3px);box-shadow:0 10px 30px rgba(0,0,0,0.2)}
+.cta-btn-outline{
+  background:transparent;color:#fff;
+  border:2px solid rgba(255,255,255,0.7);border-radius:10px;
+  padding:15px 30px;font-size:15px;font-weight:600;
+  cursor:pointer;font-family:'Inter',sans-serif;
+  transition:all .3s;
+}
+.cta-btn-outline:hover{background:rgba(255,255,255,0.1);border-color:#fff}
+.cta-perks{display:flex;gap:28px;justify-content:center;flex-wrap:wrap}
+.cta-perk{display:flex;align-items:center;gap:8px;font-size:14px;color:rgba(255,255,255,0.85)}
+.cta-perk::before{content:'•';font-size:10px}
+
+/* ── FOOTER ── */
+footer{
+  background:#1a1a2e;color:#fff;
+  padding:70px 60px 0;
+}
+.footer-grid{
+  display:grid;grid-template-columns:1.4fr 1fr 1fr 1.3fr;gap:60px;
+  margin-bottom:60px;
+}
+.footer-logo-wrap{display:flex;align-items:center;gap:10px;margin-bottom:16px}
+.footer-logo-icon{
+  width:44px;height:44px;border-radius:10px;
+  background:var(--orange);display:flex;align-items:center;justify-content:center;
+  font-size:20px;font-weight:800;color:#fff;
+}
+.footer-logo-text{font-size:18px;font-weight:700}
+.footer-desc{font-size:14px;color:#9CA3AF;line-height:1.7;margin-bottom:20px}
+.footer-socials{display:flex;gap:10px}
+.footer-social{
+  width:36px;height:36px;border-radius:8px;
+  background:#2d2d44;
+  display:flex;align-items:center;justify-content:center;
+  font-size:16px;cursor:pointer;transition:all .3s;text-decoration:none;color:#fff;
+}
+.footer-social:hover{background:var(--orange);transform:translateY(-3px)}
+.footer-col h4{font-size:14px;font-weight:700;margin-bottom:20px;letter-spacing:.05em}
+.footer-col ul{list-style:none;display:flex;flex-direction:column;gap:12px}
+.footer-col ul a{font-size:14px;color:#9CA3AF;text-decoration:none;transition:color .2s}
+.footer-col ul a:hover{color:var(--orange)}
+.footer-contact-item{display:flex;align-items:flex-start;gap:10px;font-size:14px;color:#9CA3AF;margin-bottom:12px}
+.footer-contact-icon{color:var(--orange);margin-top:2px;flex-shrink:0}
+.footer-newsletter h4{font-size:14px;font-weight:700;margin-bottom:10px}
+.footer-newsletter p{font-size:13px;color:#9CA3AF;margin-bottom:16px;line-height:1.6}
+.newsletter-input{
+  width:100%;background:#2d2d44;border:1px solid #374151;border-radius:10px;
+  padding:12px 16px;font-size:14px;color:#fff;font-family:'Inter',sans-serif;
+  margin-bottom:10px;outline:none;transition:border-color .2s;
+}
+.newsletter-input::placeholder{color:#6B7280}
+.newsletter-input:focus{border-color:var(--orange)}
+.newsletter-btn{
+  width:100%;background:var(--orange);color:#fff;
+  border:none;border-radius:10px;
+  padding:12px;font-size:14px;font-weight:600;
+  cursor:pointer;font-family:'Inter',sans-serif;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  transition:all .3s;
+}
+.newsletter-btn:hover{background:var(--orange-dark)}
+.footer-bottom{
+  border-top:1px solid #2d2d44;
+  padding:24px 0;
+  display:flex;justify-content:space-between;align-items:center;
+  font-size:13px;color:#6B7280;
+}
+.footer-bottom-links{display:flex;gap:24px}
+.footer-bottom-links a{color:#6B7280;text-decoration:none;transition:color .2s}
+.footer-bottom-links a:hover{color:var(--orange)}
+
+/* ── SCROLL-TO-TOP ── */
+.scroll-top{
+  position:fixed;bottom:32px;right:32px;z-index:500;
+  width:48px;height:48px;border-radius:50%;
+  background:var(--orange);color:#fff;
+  border:none;cursor:pointer;font-size:20px;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 4px 20px rgba(249,115,22,0.4);
+  opacity:0;transform:translateY(20px);
+  transition:all .3s;
+}
+.scroll-top.show{opacity:1;transform:translateY(0)}
+.scroll-top:hover{transform:translateY(-4px);box-shadow:0 8px 30px rgba(249,115,22,0.5)}
+
+/* ── DARK MODE ── */
+body.dark{
+  --text:#F1F5F9;
+  --muted:#94A3B8;
+  --border:#2A2A40;
+  --card-bg:#1A1A2E;
+  --white:#111120;
+  --orange-bg:#12121E;
+  --orange-light:rgba(249,115,22,0.15);
+  background:#0D0D1A;
+  color:#F1F5F9;
+}
+body.dark nav{background:rgba(13,13,26,0.97);border-bottom-color:#2A2A40}
+body.dark .logo-text{color:#F1F5F9}
+body.dark .nav-links a{color:#CBD5E1}
+body.dark .nav-links a:hover{color:var(--orange)}
+body.dark .theme-btn{background:#1A1A2E;border-color:#2A2A40;color:#F1F5F9}
+body.dark .theme-btn:hover{background:rgba(249,115,22,0.15)}
+
+/* sections */
+body.dark .offer-section{background:#0D0D1A}
+body.dark .webinars-section{background:#0D0D1A}
+body.dark .team-section{background:#0D0D1A}
+body.dark .stats-strip{background:#12121E}
+body.dark .impact-section{background:#12121E}
+body.dark .testi-section{background:#12121E}
+body.dark .faq-section{background:#12121E}
+body.dark .hero{background:#12121E}
+
+/* cards */
+body.dark .offer-card{background:#1A1A2E;border-color:#2A2A40}
+body.dark .offer-card h3{color:#F1F5F9}
+body.dark .offer-card p{color:#94A3B8}
+body.dark .impact-card{background:#1A1A2E;border-color:#2A2A40}
+body.dark .impact-label{color:#94A3B8}
+body.dark .webinar-card{background:#1A1A2E;border-color:#2A2A40;border-left-color:var(--orange)}
+body.dark .webinar-card::before{background:rgba(249,115,22,0.06)}
+body.dark .webinar-title{color:#F1F5F9}
+body.dark .webinar-meta{color:#94A3B8}
+body.dark .testi-card{background:#1A1A2E;border-color:#2A2A40}
+body.dark .testi-name{color:#F1F5F9}
+body.dark .testi-role{color:#94A3B8}
+body.dark .testi-text{color:#94A3B8}
+body.dark .team-card{background:#1A1A2E;border-color:#2A2A40}
+body.dark .team-card:hover{border-color:var(--orange)}
+body.dark .team-name{color:#F1F5F9}
+body.dark .team-bio{color:#94A3B8}
+body.dark .faq-item{background:#1A1A2E;border-color:#2A2A40}
+body.dark .faq-question{color:#F1F5F9}
+body.dark .faq-icon{border-color:#3A3A55;color:var(--orange)}
+body.dark .faq-answer{color:#94A3B8}
+
+/* hero */
+body.dark .hero-float-card{background:#1A1A2E;border:1px solid #2A2A40;color:#F1F5F9}
+body.dark .float-title{color:#F1F5F9}
+body.dark .float-sub{color:#94A3B8}
+body.dark .hero-badge{background:#1A1A2E;border-color:#2A2A40;color:#F1F5F9}
+body.dark .hero h1{color:#F1F5F9}
+body.dark .hero-sub{color:#94A3B8}
+body.dark .btn-secondary{background:#1A1A2E;border-color:#2A2A40;color:#F1F5F9}
+body.dark .btn-secondary:hover{border-color:var(--orange);color:var(--orange)}
+body.dark .hero-circle{background:rgba(249,115,22,0.12)}
+
+/* section headings */
+body.dark .section-center h2{color:#F1F5F9}
+body.dark .section-center p{color:#94A3B8}
+
+/* stat strip */
+body.dark .stat-label{color:#94A3B8}
+
+/* offer icons */
+body.dark .offer-icon{background:rgba(249,115,22,0.15)}
+body.dark .impact-icon{background:rgba(249,115,22,0.15)}
+body.dark .testi-avatar{background:rgba(249,115,22,0.15)}
+body.dark .team-avatar{background:rgba(249,115,22,0.15)}
+body.dark .float-icon{background:rgba(249,115,22,0.15)}
+
+/* social btns */
+body.dark .social-btn{background:#1A1A2E;border-color:#2A2A40;color:#CBD5E1}
+body.dark .social-btn:hover{background:var(--orange);border-color:var(--orange);color:#fff}
+
+/* view all */
+body.dark .view-all-btn{color:var(--orange);border-color:var(--orange)}
+body.dark .view-all-btn:hover{background:var(--orange);color:#fff}
+
+/* scrollbar */
+body.dark ::-webkit-scrollbar-track{background:#0D0D1A}
+
+/* scroll top */
+body.dark .scroll-top{box-shadow:0 4px 20px rgba(249,115,22,0.35)}
+
+@keyframes fadeUp{to{opacity:1;transform:translateY(0)}}
+
+/* responsive */
+@media(max-width:900px){
+  nav{padding:0 24px}
+  .nav-links{display:none}
+  section,nav+*{padding:70px 24px}
+  .hero{padding:90px 24px 50px;flex-direction:column;gap:40px}
+  .hero-right{height:350px;width:100%}
+  .stats-strip{padding:20px 24px 50px;flex-wrap:wrap;gap:28px}
+  .offer-grid,.testi-grid{grid-template-columns:1fr 1fr}
+  .impact-grid,.team-grid{grid-template-columns:1fr 1fr}
+  .footer-grid{grid-template-columns:1fr 1fr;gap:36px}
+}
+@media(max-width:560px){
+  .offer-grid,.impact-grid,.testi-grid,.team-grid{grid-template-columns:1fr}
+  .footer-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- ── NAV ── -->
+<nav id="navbar">
+  <a href="#" class="logo-wrap">
+    <div class="logo-icon">T</div>
+    <span class="logo-text">Tiesverse</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#home">Home</a></li>
+    <li><a href="#about">About Us</a></li>
+    <li><a href="#story">Our Story</a></li>
+    <li><a href="#initiatives">Initiatives</a></li>
+    <li><a href="#career">Career</a></li>
+  </ul>
+  <div class="nav-right">
+    <button class="theme-btn" id="themeBtn" title="Toggle dark mode"><svg id="themeIcon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></button>
+    <button class="join-btn">Join Community</button>
+  </div>
+</nav>
+
+<!-- ── HERO ── -->
+<section class="hero" id="home">
+  <div class="hero-left">
+    <div class="hero-badge">
+      <span class="badge-dot"></span>
+      Join 10,000+ Students
+    </div>
+    <h1>INDIA'S LEADING<br/><span class="orange">YOUTH PLATFORM</span></h1>
+    <p class="hero-sub">Connecting students, professionals, and organizations through Tiesverse – where opportunities meet talent.</p>
+    <div class="hero-btns">
+      <button class="btn-primary">Join Now &nbsp;→</button>
+      <button class="btn-secondary"><svg width="14" height="14" viewBox="0 0 24 24" fill="var(--orange)" stroke="var(--orange)" stroke-width="1"><polygon points="5 3 19 12 5 21 5 3"/></svg>&nbsp; Explore Events</button>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="hero-circle">
+      <div class="hero-rocket-wrap"><svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/></svg></div>
+    </div>
+    <div class="hero-float-card">
+      <div class="float-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--orange)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg></div>
+      <div>
+        <div class="float-title">Learn &amp; Grow</div>
+        <div class="float-sub">Expert Sessions</div>
+      </div>
+    </div>
+    <div class="hero-float-card">
+      <div class="float-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--orange)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+      <div>
+        <div class="float-title">Network</div>
+        <div class="float-sub">Connect &amp; Collaborate</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── STATS ── -->
+<div class="stats-strip">
+  <div class="stat-item reveal">
+    <div class="stat-num" data-target="50" data-suffix="+">0</div>
+    <div class="stat-label">Webinars</div>
+  </div>
+  <div class="stat-item reveal" style="transition-delay:.1s">
+    <div class="stat-num" data-target="10" data-suffix="k+">0</div>
+    <div class="stat-label">Students</div>
+  </div>
+  <div class="stat-item reveal" style="transition-delay:.2s">
+    <div class="stat-num" data-target="100" data-suffix="+">0</div>
+    <div class="stat-label">Events</div>
+  </div>
+</div>
+
+<!-- ── WHAT WE OFFER ── -->
+<section class="offer-section" id="about">
+  <div class="section-center reveal">
+    <h2>What We Offer</h2>
+    <p>Everything you need to accelerate your learning journey and career growth</p>
+  </div>
+  <div class="offer-grid">
+    <div class="offer-card reveal" style="transition-delay:0s">
+      <div class="offer-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="var(--orange)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div>
+      <h3>Courses</h3>
+      <p>Access curated courses designed for student growth and skill development</p>
+    </div>
+    <div class="offer-card reveal" style="transition-delay:.1s">
+      <div class="offer-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="var(--orange)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg></div>
+      <h3>Webinars</h3>
+      <p>Join live sessions with industry experts and thought leaders</p>
+    </div>
+    <div class="offer-card reveal" style="transition-delay:.2s">
+      <div class="offer-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="var(--orange)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+      <h3>Team</h3>
+      <p>Connect with a passionate community of young changemakers</p>
+    </div>
+    <div class="offer-card reveal" style="transition-delay:.3s">
+      <div class="offer-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="var(--orange)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
+      <h3>Events</h3>
+      <p>Participate in workshops, hackathons, and networking events curated for you</p>
+    </div>
+    <div class="offer-card reveal" style="transition-delay:.4s">
+      <div class="offer-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="var(--orange)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></div>
+      <h3>Blogs</h3>
+      <p>Read insightful articles from industry professionals and community contributors</p>
+    </div>
+    <div class="offer-card reveal" style="transition-delay:.5s">
+      <div class="offer-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="var(--orange)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg></div>
+      <h3>Resources</h3>
+      <p>Access templates, guides, and career resources to help you succeed</p>
+    </div>
+  </div>
+</section>
+
+<!-- ── IMPACT ── -->
+<section class="impact-section">
+  <div class="section-center reveal">
+    <h2>Our Impact in Numbers</h2>
+    <p>Join thousands of students and professionals who are transforming their careers</p>
+  </div>
+  <div class="impact-grid">
+    <div class="impact-card reveal" style="transition-delay:0s">
+      <div class="impact-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--orange)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+      <div class="impact-num" data-target="10000" data-suffix="+">0</div>
+      <div class="impact-label">Active Members</div>
+    </div>
+    <div class="impact-card reveal" style="transition-delay:.12s">
+      <div class="impact-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--orange)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/></svg></div>
+      <div class="impact-num" data-target="5000" data-suffix="+">0</div>
+      <div class="impact-label">Certifications Issued</div>
+    </div>
+    <div class="impact-card reveal" style="transition-delay:.24s">
+      <div class="impact-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--orange)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
+      <div class="impact-num" data-target="150" data-suffix="+">0</div>
+      <div class="impact-label">Events Conducted</div>
+    </div>
+    <div class="impact-card reveal" style="transition-delay:.36s">
+      <div class="impact-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--orange)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg></div>
+      <div class="impact-num" data-target="95" data-suffix="%">0</div>
+      <div class="impact-label">Success Rate</div>
+    </div>
+  </div>
+</section>
+
+<!-- ── WEBINARS ── -->
+<section class="webinars-section" id="initiatives">
+  <div class="section-center reveal">
+    <h2>Upcoming Webinars</h2>
+    <p>Join our expert-led sessions and expand your knowledge</p>
+  </div>
+  <div class="webinar-list">
+    <div class="webinar-card reveal" style="transition-delay:0s">
+      <div class="webinar-info">
+        <div class="webinar-title">Building Your Personal Brand in Tech</div>
+        <div class="webinar-meta">
+          <span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle;margin-right:4px"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg> <strong>Dr. Sarah Kumar</strong> • Tech Entrepreneur</span>
+          <span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle;margin-right:4px"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg> June 5, 2026</span>
+          <span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle;margin-right:4px"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> 6:00 PM IST</span>
+          <span class="reg-count">250+ registered</span>
+        </div>
+      </div>
+      <button class="webinar-register">Register &nbsp;→</button>
+    </div>
+    <div class="webinar-card reveal" style="transition-delay:.1s">
+      <div class="webinar-info">
+        <div class="webinar-title">Career Growth Strategies for Students</div>
+        <div class="webinar-meta">
+          <span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle;margin-right:4px"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg> <strong>Rajesh Mehta</strong> • HR Director, Tech Corp</span>
+          <span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle;margin-right:4px"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg> June 12, 2026</span>
+          <span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle;margin-right:4px"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> 7:00 PM IST</span>
+          <span class="reg-count">180+ registered</span>
+        </div>
+      </div>
+      <button class="webinar-register">Register &nbsp;→</button>
+    </div>
+    <div class="webinar-card reveal" style="transition-delay:.2s">
+      <div class="webinar-info">
+        <div class="webinar-title">Mastering Interview Skills &amp; Networking</div>
+        <div class="webinar-meta">
+          <span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle;margin-right:4px"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg> <strong>Priya Sharma</strong> • Senior Recruiter, Google</span>
+          <span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle;margin-right:4px"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg> June 19, 2026</span>
+          <span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle;margin-right:4px"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> 5:00 PM IST</span>
+          <span class="reg-count">320+ registered</span>
+        </div>
+      </div>
+      <button class="webinar-register">Register &nbsp;→</button>
+    </div>
+  </div>
+  <div class="view-all-wrap reveal">
+    <button class="view-all-btn">View All Webinars</button>
+  </div>
+</section>
+
+<!-- ── TESTIMONIALS ── -->
+<section class="testi-section">
+  <div class="section-center reveal">
+    <h2>What Students Say</h2>
+    <p>Hear from our community members about their experiences</p>
+  </div>
+  <div class="testi-grid">
+    <div class="testi-card reveal" style="transition-delay:0s">
+      <div class="testi-quote-icon">❝</div>
+      <div class="testi-author">
+        <div class="testi-avatar"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="var(--orange)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg></div>
+        <div>
+          <div class="testi-name">Aarav Patel</div>
+          <div class="testi-role">Computer Science Student</div>
+          <div class="testi-school">IIT Delhi</div>
+        </div>
+      </div>
+      <div class="stars">★★★★★</div>
+      <p class="testi-text">"The webinars and mentorship programs have been game-changing for my career. I landed my dream internship thanks to the skills I learned here!"</p>
+    </div>
+    <div class="testi-card reveal" style="transition-delay:.12s">
+      <div class="testi-quote-icon">❝</div>
+      <div class="testi-author">
+        <div class="testi-avatar"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="var(--orange)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg></div>
+        <div>
+          <div class="testi-name">Diya Sharma</div>
+          <div class="testi-role">Engineering Student</div>
+          <div class="testi-school">NIT Trichy</div>
+        </div>
+      </div>
+      <div class="stars">★★★★★</div>
+      <p class="testi-text">"Amazing community! The networking opportunities and industry connections have helped me grow both personally and professionally."</p>
+    </div>
+    <div class="testi-card reveal" style="transition-delay:.24s">
+      <div class="testi-quote-icon">❝</div>
+      <div class="testi-author">
+        <div class="testi-avatar"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="var(--orange)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg></div>
+        <div>
+          <div class="testi-name">Rohan Verma</div>
+          <div class="testi-role">Business Student</div>
+          <div class="testi-school">Delhi University</div>
+        </div>
+      </div>
+      <div class="stars">★★★★★</div>
+      <p class="testi-text">"Best platform for students looking to upskill and connect with like-minded peers. The events are always well-organized and insightful."</p>
+    </div>
+  </div>
+</section>
+
+<!-- ── TEAM ── -->
+<section class="team-section">
+  <div class="section-center reveal">
+    <h2>Meet Our Team</h2>
+    <p>Dedicated individuals working to empower the next generation</p>
+  </div>
+  <div class="team-grid">
+    <div class="team-card reveal" style="transition-delay:0s">
+      <div class="team-avatar-wrap"><div class="team-avatar"><svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="var(--orange)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg></div></div>
+      <div class="team-name">Arjun Malhotra</div>
+      <div class="team-role">Founder &amp; President</div>
+      <div class="team-bio">Passionate about empowering youth</div>
+      <div class="team-socials">
+        <a class="social-btn" href="#" title="LinkedIn"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7H10v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></a>
+        <a class="social-btn" href="#" title="Twitter"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+        <a class="social-btn" href="#" title="Email"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></a>
+      </div>
+    </div>
+    <div class="team-card featured reveal" style="transition-delay:.1s">
+      <div class="team-avatar-wrap"><div class="team-avatar"><svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="var(--orange)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg></div></div>
+      <div class="team-name">Ananya Singh</div>
+      <div class="team-role">VP Operations</div>
+      <div class="team-bio">Building communities that matter</div>
+      <div class="team-socials">
+        <a class="social-btn" href="#" title="LinkedIn"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7H10v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></a>
+        <a class="social-btn" href="#" title="Twitter"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+        <a class="social-btn" href="#" title="Email"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></a>
+      </div>
+    </div>
+    <div class="team-card reveal" style="transition-delay:.2s">
+      <div class="team-avatar-wrap"><div class="team-avatar"><svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="var(--orange)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg></div></div>
+      <div class="team-name">Vikram Reddy</div>
+      <div class="team-role">Head of Events</div>
+      <div class="team-bio">Creating memorable experiences</div>
+      <div class="team-socials">
+        <a class="social-btn" href="#" title="LinkedIn"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7H10v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></a>
+        <a class="social-btn" href="#" title="Twitter"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+        <a class="social-btn" href="#" title="Email"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></a>
+      </div>
+    </div>
+    <div class="team-card reveal" style="transition-delay:.3s">
+      <div class="team-avatar-wrap"><div class="team-avatar"><svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="var(--orange)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg></div></div>
+      <div class="team-name">Meera Joshi</div>
+      <div class="team-role">Storyteller</div>
+      <div class="team-bio">Sharing our journey and vision</div>
+      <div class="team-socials">
+        <a class="social-btn" href="#" title="LinkedIn"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7H10v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></a>
+        <a class="social-btn" href="#" title="Twitter"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+        <a class="social-btn" href="#" title="Email"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── FAQ ── -->
+<section class="faq-section" id="story">
+  <div class="section-center reveal">
+    <h2>Frequently Asked Questions</h2>
+    <p>Everything you need to know about Tiesverse</p>
+  </div>
+  <div class="faq-list">
+    <div class="faq-item reveal">
+      <button class="faq-question">What is Tiesverse? <span class="faq-icon">+</span></button>
+      <div class="faq-answer">Tiesverse is India's leading youth platform connecting students, professionals, and organizations through webinars, mentorship, events, and opportunities. We bridge the gap between talent and opportunity.</div>
+    </div>
+    <div class="faq-item reveal" style="transition-delay:.07s">
+      <button class="faq-question">How can I join the community? <span class="faq-icon">+</span></button>
+      <div class="faq-answer">Simply click the "Join Community" button at the top of the page, fill in your details, and you'll get instant access to all our events, webinars, and networking features — completely free!</div>
+    </div>
+    <div class="faq-item reveal" style="transition-delay:.14s">
+      <button class="faq-question">Are the webinars free? <span class="faq-icon">+</span></button>
+      <div class="faq-answer">Yes! Most of our webinars are free to attend. Some premium sessions and masterclasses may have a nominal fee, but we always ensure high-value content for all our members.</div>
+    </div>
+    <div class="faq-item reveal" style="transition-delay:.21s">
+      <button class="faq-question">What kind of events do you organize? <span class="faq-icon">+</span></button>
+      <div class="faq-answer">We organize webinars, hackathons, networking mixers, career fairs, workshops, and panel discussions. Our events bring together students, professionals, and industry leaders from across India.</div>
+    </div>
+    <div class="faq-item reveal" style="transition-delay:.28s">
+      <button class="faq-question">How can I become a speaker or mentor? <span class="faq-icon">+</span></button>
+      <div class="faq-answer">We're always looking for passionate industry experts and professionals to share their knowledge. Reach out to us at contact@tiesverse.com with your profile and we'll get back to you shortly.</div>
+    </div>
+    <div class="faq-item reveal" style="transition-delay:.35s">
+      <button class="faq-question">Do you provide certifications? <span class="faq-icon">+</span></button>
+      <div class="faq-answer">Yes! We provide verified digital certificates for completed courses, webinars, and events. These certificates are recognized by our partner organizations and can be shared on LinkedIn.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ── CTA ── -->
+<section class="cta-section" id="career">
+  <h2>Ready to Transform Your Career?</h2>
+  <p>Join 10,000+ students and professionals who are building their future with Tiesverse</p>
+  <div class="cta-btns">
+    <button class="cta-btn-white">Get Started Now &nbsp;→</button>
+    <button class="cta-btn-outline">Learn More</button>
+  </div>
+  <div class="cta-perks">
+    <span class="cta-perk">No credit card required</span>
+    <span class="cta-perk">Free to join</span>
+    <span class="cta-perk">Cancel anytime</span>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="footer-grid">
+    <div>
+      <div class="footer-logo-wrap">
+        <div class="footer-logo-icon">T</div>
+        <span class="footer-logo-text">Tiesverse</span>
+      </div>
+      <p class="footer-desc">Connecting students, professionals, and organizations through webinars, mentorship, events and opportunities.</p>
+      <div class="footer-socials">
+        <a class="footer-social" href="#" title="LinkedIn"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></a>
+        <a class="footer-social" href="#" title="Twitter/X"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+        <a class="footer-social" href="#" title="Instagram"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.5" fill="currentColor" stroke="none"/></svg></a>
+        <a class="footer-social" href="#" title="YouTube"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46a2.78 2.78 0 0 0-1.95 1.96A29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58a2.78 2.78 0 0 0 1.95 1.95C5.12 20 12 20 12 20s6.88 0 8.59-.47a2.78 2.78 0 0 0 1.95-1.95A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" fill="white"/></svg></a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Quick Links</h4>
+      <ul>
+        <li><a href="#">Home</a></li>
+        <li><a href="#">About Us</a></li>
+        <li><a href="#">Our Story</a></li>
+        <li><a href="#">Initiatives</a></li>
+        <li><a href="#">Career</a></li>
+        <li><a href="#">Blog</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Contact Us</h4>
+      <div class="footer-contact-item"><span class="footer-contact-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--orange)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></span> contact@tiesverse.com</div>
+      <div class="footer-contact-item"><span class="footer-contact-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--orange)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.38 2 2 0 0 1 3.58 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.96a16 16 0 0 0 6.29 6.29l1.38-1.38a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg></span> +91 98765 43210</div>
+      <div class="footer-contact-item"><span class="footer-contact-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--orange)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></span> New Delhi, India</div>
+    </div>
+    <div class="footer-newsletter">
+      <h4>Newsletter</h4>
+      <p>Subscribe to get updates on upcoming events and webinars</p>
+      <input class="newsletter-input" type="email" placeholder="Enter your email"/>
+      <button class="newsletter-btn">Subscribe &nbsp;→</button>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 Tiesverse. All rights reserved.</span>
+    <div class="footer-bottom-links">
+      <a href="#">Privacy Policy</a>
+      <a href="#">Terms of Service</a>
+      <a href="#">Cookie Policy</a>
+    </div>
+  </div>
+</footer>
+
+<!-- ── SCROLL TO TOP ── -->
+<button class="scroll-top" id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg></button>
+
+<script>
+// ── Nav scroll ──
+const navbar=document.getElementById('navbar');
+const scrollTopBtn=document.getElementById('scrollTop');
+window.addEventListener('scroll',()=>{
+  navbar.classList.toggle('scrolled',window.scrollY>60);
+  scrollTopBtn.classList.toggle('show',window.scrollY>400);
+});
+
+// ── Intersection Observer ──
+const io=new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      e.target.classList.add('visible');
+      // counter animation
+      const nums=e.target.querySelectorAll('.stat-num,.impact-num');
+      nums.forEach(n=>animateNum(n));
+    }
+  });
+},{threshold:0.15});
+document.querySelectorAll('.reveal,.reveal-left,.reveal-right,.stat-item').forEach(el=>io.observe(el));
+
+// Observe impact cards individually
+document.querySelectorAll('.impact-card,.offer-card,.webinar-card,.testi-card,.team-card,.faq-item').forEach(el=>io.observe(el));
+
+// ── Counter animation ──
+const animated=new WeakSet();
+function animateNum(el){
+  if(animated.has(el))return;
+  animated.add(el);
+  const target=parseInt(el.dataset.target)||0;
+  const suffix=el.dataset.suffix||'';
+  const dur=1600;
+  let start=null;
+  function step(ts){
+    if(!start)start=ts;
+    const p=Math.min((ts-start)/dur,1);
+    const ease=1-Math.pow(1-p,3);
+    const val=Math.floor(ease*target);
+    // format large numbers
+    const display=val>=1000?(val>=10000?(val/1000).toFixed(0)+'k':(val/1000).toFixed(1)+'k'):val;
+    el.textContent=display+suffix;
+    if(p<1)requestAnimationFrame(step);
+    else el.textContent=(target>=1000&&suffix!=='%'?
+      (target>=10000?(target/1000).toFixed(0)+'k':(target/1000).toFixed(1)+'k'):target)+suffix;
+  }
+  requestAnimationFrame(step);
+}
+
+// Also observe stat-nums at top
+document.querySelectorAll('.stat-num').forEach(el=>{
+  const io2=new IntersectionObserver(entries=>{
+    if(entries[0].isIntersecting)animateNum(el);
+  },{threshold:.5});
+  io2.observe(el);
+});
+document.querySelectorAll('.impact-num').forEach(el=>{
+  const io3=new IntersectionObserver(entries=>{
+    if(entries[0].isIntersecting)animateNum(el);
+  },{threshold:.5});
+  io3.observe(el);
+});
+
+// ── FAQ ──
+document.querySelectorAll('.faq-question').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    const item=btn.closest('.faq-item');
+    const isOpen=item.classList.contains('open');
+    document.querySelectorAll('.faq-item').forEach(i=>i.classList.remove('open'));
+    if(!isOpen)item.classList.add('open');
+  });
+});
+
+// ── Dark Mode ──
+const themeBtn=document.getElementById('themeBtn');
+const moonSVG=`<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>`;
+const sunSVG=`<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>`;
+themeBtn.addEventListener('click',()=>{
+  document.body.classList.toggle('dark');
+  themeBtn.innerHTML=document.body.classList.contains('dark')?sunSVG:moonSVG;
+});
+
+// ── Smooth card hover tilt ──
+document.querySelectorAll('.offer-card,.testi-card,.team-card,.impact-card').forEach(card=>{
+  card.addEventListener('mousemove',e=>{
+    const r=card.getBoundingClientRect();
+    const x=(e.clientX-r.left)/r.width-.5;
+    const y=(e.clientY-r.top)/r.height-.5;
+    card.style.transform=`perspective(600px) rotateY(${x*8}deg) rotateX(${-y*8}deg) translateY(-6px)`;
+  });
+  card.addEventListener('mouseleave',()=>card.style.transform='');
+});
+
+// ── Webinar register button ripple ──
+document.querySelectorAll('.webinar-register,.btn-primary,.join-btn,.cta-btn-white,.newsletter-btn').forEach(btn=>{
+  btn.addEventListener('click',function(e){
+    const ripple=document.createElement('span');
+    const r=this.getBoundingClientRect();
+    ripple.style.cssText=`position:absolute;border-radius:50%;background:rgba(255,255,255,0.35);
+      pointer-events:none;animation:ripple .6s linear;
+      width:80px;height:80px;
+      left:${e.clientX-r.left-40}px;top:${e.clientY-r.top-40}px;`;
+    this.style.position='relative';this.style.overflow='hidden';
+    this.appendChild(ripple);
+    setTimeout(()=>ripple.remove(),600);
+  });
+});
+const rippleCSS=document.createElement('style');
+rippleCSS.textContent='@keyframes ripple{from{transform:scale(0);opacity:1}to{transform:scale(3);opacity:0}}';
+document.head.appendChild(rippleCSS);
+
+// ── Newsletter subscribe feedback ──
+document.querySelector('.newsletter-btn').addEventListener('click',function(){
+  const input=document.querySelector('.newsletter-input');
+  if(input.value&&input.value.includes('@')){
+    this.textContent='✓ Subscribed!';
+    this.style.background='#16a34a';
+    input.value='';
+    setTimeout(()=>{this.textContent='Subscribe →';this.style.background=''},3000);
+  } else {
+    input.style.borderColor='#ef4444';
+    setTimeout(()=>input.style.borderColor='',2000);
+  }
+});
+</script>
+</body>
 </html>
